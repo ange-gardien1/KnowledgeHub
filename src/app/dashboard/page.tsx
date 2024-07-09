@@ -1,5 +1,8 @@
 import { redirect } from "next/navigation";
 import { auth } from "../auth";
+import Sidebar from "@/components/sideBar";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
+
 
 
 
@@ -17,8 +20,11 @@ export default async function Dashboardpage() {
       <div>
         <p>Hi</p>
        Welcome: {session?.user?.name}
+    
       </div>
-
+    <div>
+        <Sidebar></Sidebar>
+    </div>
     </div>
   );
 }
