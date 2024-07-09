@@ -45,7 +45,7 @@ export const users = pgTable("user", {
   email: text("email").notNull(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
-  // roleId: uuid('role_id').references(() => roles.id),
+  roleId: uuid('role_id').references(() => roles.id),
 });
 
 export const accounts = pgTable(
@@ -115,71 +115,73 @@ export const authenticators = pgTable(
   })
 );
 
-// export const documents = pgTable('documents', {
-//   id: uuid('id').primaryKey(),
-//   userId: uuid('user_id').references(() => users.id),
-//   title: varchar('title', { length: 255 }).notNull(),
-//   content: text('content'),
-//   type: varchar('type', { length: 4 }).notNull().default(DocumentType.TEXT),
-//   pdfUrl: varchar('pdf_url', { length: 255 }),
-//   createdAt: timestamp('created_at').defaultNow().notNull(),
-//   updatedAt: timestamp("updated_at", { withTimezone: true }).default(sql`now()`).notNull(),
-// });
+export const documents = pgTable('documents', {
+  id: uuid('id').primaryKey().default(sql`gen_random_uuid()`),
+  userId: uuid("userId")
+  .notNull()
+  .references(() => users.id, { onDelete: "cascade" }),
+  title: varchar('title', { length: 255 }).notNull(),
+  content: text('content'),
+  type: varchar('type', { length: 4 }).notNull().default(DocumentType.TEXT),
+  pdfUrl: varchar('pdf_url', { length: 255 }),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).default(sql`now()`).notNull(),
+});
 
-// export const documentVersions = pgTable('document_versions', {
-//   id: uuid('id').primaryKey(),
-//   documentId: uuid('document_id').references(() => documents.id),
-//   versionNumber: integer('version_number').notNull(),
-//   content: text('content'),
-//   pdfUrl: varchar('pdf_url', { length: 255 }),
-//   createdAt: timestamp('created_at').defaultNow().notNull(),
-//   updatedAt: timestamp("updated_at", { withTimezone: true }).default(sql`now()`).notNull(),
-// });
+export const documentVersions = pgTable('document_versions', {
+  id: uuid('id').primaryKey(),
+  documentId: uuid('document_id').references(() => documents.id),
+  versionNumber: integer('version_number').notNull(),
+  content: text('content'),
+  pdfUrl: varchar('pdf_url', { length: 255 }),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).default(sql`now()`).notNull(),
+});
 
-// export const editRequests = pgTable('edit_requests', {
-//   id: uuid('id').primaryKey(),
-//   documentId: uuid('document_id').references(() => documents.id),
-//   userId: uuid('user_id').references(() => users.id),
-//   requestType: varchar('request_type', { length: 6 }).notNull().default(RequestType.EDIT),
-//   status: varchar('status', { length: 8 }).notNull().default(StatusType.PENDING),
-//   createdAt: timestamp('created_at').defaultNow().notNull(),
-//   updatedAt: timestamp("updated_at", { withTimezone: true }).default(sql`now()`).notNull(),
-// });
+export const editRequests = pgTable('edit_requests', {
+  id: uuid('id').primaryKey(),
+  documentId: uuid('document_id').references(() => documents.id),
+  userId: uuid('user_id').references(() => users.id),
+  requestType: varchar('request_type', { length: 6 }).notNull().default(RequestType.EDIT),
+  status: varchar('status', { length: 8 }).notNull().default(StatusType.PENDING),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).default(sql`now()`).notNull(),
+});
 
-// export const notifications = pgTable('notifications', {
-//   id: uuid('id').primaryKey(),
-//   userId: uuid('user_id').references(() => users.id),
-//   type: varchar('type', { length: 13 }).notNull().default(NotificationType.EDIT_REQUEST),
-//   message: varchar('message', { length: 255 }).notNull(),
-//   read: boolean('read').default(false).notNull(),
-//   createdAt: timestamp('created_at').defaultNow().notNull(),
-// });
+export const notifications = pgTable('notifications', {
+  id: uuid('id').primaryKey(),
+  userId: uuid('user_id').references(() => users.id),
+  type: varchar('type', { length: 13 }).notNull().default(NotificationType.EDIT_REQUEST),
+  message: varchar('message', { length: 255 }).notNull(),
+  read: boolean('read').default(false).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
 
-// export const shares = pgTable('shares', {
-//   id: uuid('id').primaryKey(),
-//   documentId: uuid('document_id').references(() => documents.id),
-//   sharedWithUserId: uuid('shared_with_user_id').references(() => users.id),
-//   permission: varchar('permission', { length: 6 }).notNull().default(PermissionType.VIEW),
-//   createdAt: timestamp('created_at').defaultNow().notNull(),
-//   updatedAt: timestamp("updated_at", { withTimezone: true }).default(sql`now()`).notNull(),
-// });
+export const shares = pgTable('shares', {
+  id: uuid('id').primaryKey(),
+  documentId: uuid('document_id').references(() => documents.id),
+  sharedWithUserId: uuid('shared_with_user_id').references(() => users.id),
+  permission: varchar('permission', { length: 6 }).notNull().default(PermissionType.VIEW),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).default(sql`now()`).notNull(),
+});
 
-// export const comments = pgTable('comments', {
-//   id: uuid('id').primaryKey(),
-//   documentId: uuid('document_id').references(() => documents.id),
-//   userId: uuid('user_id').references(() => users.id),
-//   content: text('content').notNull(),
-//   createdAt: timestamp('created_at').defaultNow().notNull(),
-//   updatedAt: timestamp("updated_at", { withTimezone: true }).default(sql`now()`).notNull(),
-// });
+export const comments = pgTable('comments', {
+  id: uuid('id').primaryKey(),
+  documentId: uuid('document_id').references(() => documents.id),
+  userId: uuid('user_id').references(() => users.id),
+  content: text('content').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).default(sql`now()`).notNull(),
+});
 
-// export const resources = pgTable('resources', {
-//   id: uuid('id').primaryKey(),
-//   userId: uuid('user_id').references(() => users.id),
-//   title: varchar('title', { length: 255 }).notNull(),
-//   url: varchar('url', { length: 255 }).notNull(),
-//   type: varchar('type', { length: 10 }).notNull(),
-//   description: text('description'),
-//   createdAt: timestamp('created_at').defaultNow().notNull(),
-//   updatedAt: timestamp("updated_at", { withTimezone: true }).default(sql`now()`).notNull(),
-// });
+export const resources = pgTable('resources', {
+  id: uuid('id').primaryKey(),
+  userId: uuid('user_id').references(() => users.id),
+  title: varchar('title', { length: 255 }).notNull(),
+  url: varchar('url', { length: 255 }).notNull(),
+  type: varchar('type', { length: 10 }).notNull(),
+  description: text('description'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).default(sql`now()`).notNull(),
+});
