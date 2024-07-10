@@ -2,7 +2,7 @@ import React from 'react'
 
 function documents() {
   return (
-    <div>documentds</div>
+    <div>all documents</div>
   )
 }
 
