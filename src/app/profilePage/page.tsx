@@ -1,11 +1,15 @@
 "use client"
+
 import React from 'react'
-import { trpc } from '../_trpc/client'
+
 
 function ProfilePage() {
-    const {data, isLoading} = trpc.users.getAll.useQuery();
+    
   return (
-    <div>{data && JSON.stringify(data)}</div>
+   <div>
+    <h1>hello</h1>
+
+   </div>
   )
 }
 

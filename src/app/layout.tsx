@@ -4,6 +4,7 @@ import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import Provider from "./_trpc/provider";
+import Sidebar from "@/components/sideBar";
 
 const inter = Inter({ subsets: ["latin"] });
 
