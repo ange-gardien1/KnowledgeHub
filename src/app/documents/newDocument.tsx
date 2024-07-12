@@ -1,12 +1,14 @@
 'use client'
+import CreateDocuments from '@/components/newDocument/createDocnbebt'
 import DocumentUpload from '@/components/newDocument/uploadDocument'
 import React from 'react'
 
 function Createdocument() {
   return (
     <div>
-        <div>Createdocument</div>
+   
     <DocumentUpload/>
+    <CreateDocuments/>
     </div>
    
   )
