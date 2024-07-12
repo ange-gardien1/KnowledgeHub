@@ -2,7 +2,8 @@ import { redirect } from "next/navigation";
 import { auth } from "../auth";
 import Sidebar from "@/components/sideBar";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import GetDocuments from "./upload";
+import GetDocuments from "./documents";
+import { DocumentCount } from "./numberOfDoc";
 
 export default async function Dashboardpage() {
   const session = await auth();
@@ -20,6 +21,9 @@ export default async function Dashboardpage() {
         <div>
           <p>Hi</p>
           Welcome: {session?.user?.name}
+        </div>
+        <div >
+          <DocumentCount/>
         </div>
         <GetDocuments />
       </div>

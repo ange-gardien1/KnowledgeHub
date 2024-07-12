@@ -1,11 +1,13 @@
 import { trpc } from "@/app/_trpc/client";
-import React, { useState } from "react";
-
+import React, { useState, useRef } from "react";
+import { IconPlus } from "@tabler/icons-react";
 
 const DocumentUpload: React.FC = () => {
   const [title, setTitle] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const uploadDocument = trpc.documents.newDocument.useMutation();
 
@@ -48,6 +50,12 @@ const DocumentUpload: React.FC = () => {
     };
   };
 
+  const handleIconClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       <div>
@@ -60,10 +68,23 @@ const DocumentUpload: React.FC = () => {
         />
       </div>
       <div>
-        <label htmlFor="file">File:</label>
-        <input type="file" id="file" onChange={handleFileChange} />
+        <input
+          type="file"
+          id="file"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          style={{ display: "none" }}
+        />
+        <IconPlus
+          size={34}
+          className="text-primary dark:text-gray-100"
+          stroke={2}
+          strokeLinejoin="miter"
+          onClick={handleIconClick}
+          style={{ cursor: "pointer" }}
+        />
       </div>
-      <button type="submit">Upload</button>
+      <button type="submit">Add New Document</button>
       {error && <p>{error}</p>}
     </form>
   );
