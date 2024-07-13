@@ -4,7 +4,8 @@ import Sidebar from '@/components/sideBar'
 import React from 'react'
 import Createdocument from './newDocument'
 import GetDocuments from '../dashboard/documents'
-import CreateDocuments from '@/components/newDocument/createDocnbebt'
+import Tiptap from '@/components/Tiptap'
+
 
 
 function documents() {
@@ -17,6 +18,7 @@ function documents() {
        <Createdocument/>
         </div>
       <GetDocuments/>
+      <Tiptap/>
       </div>
     </div>
   )

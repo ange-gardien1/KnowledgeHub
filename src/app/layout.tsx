@@ -5,6 +5,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import Provider from "./_trpc/provider";
 import Sidebar from "@/components/sideBar";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,7 +32,13 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
+        <ThemeProvider  
+        attribute="class"
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange>
         <Provider>{children}</Provider>
+        </ThemeProvider>
       </body>
     </html>
   );
