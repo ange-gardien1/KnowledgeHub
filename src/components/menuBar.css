@@ -1,0 +1,28 @@
+.control-group {
+    margin-bottom: 1rem;
+  }
+  
+  .button-group {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .icon-button {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: background 0.3s, transform 0.3s;
+  }
+  
+  .icon-button.is-active {
+    background: #d1e7dd; /* Adjust the active background color as needed */
+    transform: scale(1.2); /* Increase the size when active */
+  }
+  
+  .icon-button:hover {
+    background: #f8f9fa; /* Adjust the hover background color as needed */
+  }
+  

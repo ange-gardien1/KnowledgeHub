@@ -104,10 +104,8 @@ const CreateDocuments: React.FC = () => {
                 </button>
               </div>
             </div>
-            {/* Main content section */}
             <div className="mt-10 flex-grow">
               <div className="mb-4">
-                {/* Title input */}
                 <label
                   htmlFor="title"
                   className="block text-sm font-medium text-gray-700 dark:text-gray-300"
@@ -119,7 +117,7 @@ const CreateDocuments: React.FC = () => {
                   id="title"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-500 focus:ring focus:ring-primary-500 focus:ring-opacity-50 dark:bg-hc-darkgray-100 dark:border-hc-darkgray-200 dark:text-gray-300"
+                  className="mt-1 block w-full rounded-md border-yellow-300 shadow-sm focus:border-primary-500 focus:ring focus:ring-primary-500 focus:ring-opacity-50 dark:bg-hc-darkgray-100 dark:border-hc-darkgray-200 dark:text-gray-300"
                 />
               </div>
               <div className="mb-4 flex-grow">

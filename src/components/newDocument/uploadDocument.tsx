@@ -41,7 +41,7 @@ const DocumentUpload: React.FC = () => {
       try {
         await uploadDocument.mutateAsync({
           title,
-          type: file.type === "application/pdf" ? "pdf" : "pdf",
+          type: file.type === "application/pdf"  ? "pdf" : "pdf",
           pdfUrl: base64File,
         });
         setTitle("");
