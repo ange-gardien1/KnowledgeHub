@@ -26,7 +26,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function DocumentCount() {
-  const { data } = trpc.documents.getdocuments.useQuery();
+  const { data } = trpc.documents.getDocumentsByUserId.useQuery();
   const documentCount = data?.length || 0;
 
   const chartData = [{ name: "Documents", count: documentCount }];
