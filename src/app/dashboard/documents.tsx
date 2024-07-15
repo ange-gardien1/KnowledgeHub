@@ -17,7 +17,7 @@ type Document = {
 };
 
 const GetDocuments = () => {
-  const { data, isLoading } = trpc.documents.getdocuments.useQuery();
+  const { data, isLoading } = trpc.documents.getDocumentsByUserId.useQuery();
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(
     null
   );
