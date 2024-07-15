@@ -3,7 +3,7 @@ import { auth } from "../auth";
 import Sidebar from "@/components/sideBar";
 import GetResources from "./getResources";
 
-export default async function () {
+export default async function ResourcesPage() {
   const session = await auth();
   const user = session?.user?.id;
 
