@@ -1,16 +1,11 @@
-
-
-
-"use client"
-import { useState } from "react";
+'use client'
+import React, { useState } from "react";
 import { trpc } from "../_trpc/client";
 import { IconPdf, IconTxt } from "@tabler/icons-react";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import EditDocument from "@/components/editDocument";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 type Document = {
   id: string;
@@ -21,14 +16,14 @@ type Document = {
 
 const GetDocuments = () => {
   const { data, isLoading } = trpc.documents.getDocumentsByUserId.useQuery();
-  const [selectedDocument, setSelectedDocument] = useState<Document | null>(
-    null
-  );
+  const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
   const addResourceMutation = trpc.resources.addResourceByDocumentId.useMutation();
-  const [isAddingResource, setIsAddingResource] = useState(false); // State to manage adding resource status
+  const [isAddingResource, setIsAddingResource] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const handleDocumentClick = (document: Document) => {
     setSelectedDocument(document);
+    setIsEditing(false); 
   };
 
   const handleAddToResources = async () => {
@@ -43,7 +38,7 @@ const GetDocuments = () => {
     };
 
     try {
-      setIsAddingResource(true); // Set adding resource state to true
+      setIsAddingResource(true);
       await addResourceMutation.mutateAsync(resource);
       alert("Document added to resources successfully!");
       setSelectedDocument(null);
@@ -51,65 +46,86 @@ const GetDocuments = () => {
       console.error("Failed to add document to resources:", error);
       alert("Failed to add document to resources. Please try again.");
     } finally {
-      setIsAddingResource(false); // Reset adding resource state
+      setIsAddingResource(false);
     }
   };
 
+  const handleEditDocument = () => {
+    setIsEditing(true);
+  };
+
   return (
-    <div>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
-        {isLoading ? (
-          <p>Loading documents...</p>
-        ) : (
-          data?.map((document: Document) => (
-            <div
-              key={document.id}
-              style={{ flex: "0 1 18%", marginBottom: "10px" }}
-              onClick={() => handleDocumentClick(document)}
-            >
-              <Card>
-                <CardContent>
-                  {document.pdfUrl ? (
-                    <a
-                      href={document.pdfUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <IconPdf stroke={2} size={90} />
-                    </a>
-                  ) : (
-                    <IconTxt stroke={2} size={90} />
-                  )}
-                </CardContent>
-                <CardFooter>{document.title}</CardFooter>
-              </Card>
-            </div>
-          ))
-        )}
+    <div style={{ display: "flex", gap: "20px" }}>
+      <div style={{ flex: "1 1 50%", marginRight: "20px" }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+          {isLoading ? (
+            <p>Loading documents...</p>
+          ) : (
+            data?.map((document: Document) => (
+              <div
+                key={document.id}
+                style={{ flex: "0 1 18%", marginBottom: "10px", cursor: "pointer" }}
+                onClick={() => handleDocumentClick(document)}
+              >
+                <Card>
+                  <CardContent>
+                    {document.pdfUrl ? (
+                      <a
+                        href={document.pdfUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <IconPdf stroke={2} size={90} />
+                      </a>
+                    ) : (
+                      <IconTxt stroke={2} size={90} />
+                    )}
+                  </CardContent>
+                  <CardFooter>
+                    {document.title}
+                  </CardFooter>
+                </Card>
+              </div>
+            ))
+          )}
+        </div>
       </div>
       {selectedDocument && (
-        <div style={{ marginTop: "20px" }}>
-          <h2>{selectedDocument.title}</h2>
-          {selectedDocument.pdfUrl ? (
-            <iframe
-              src={selectedDocument.pdfUrl}
-              width="100%"
-              height="500px"
-              title="PDF Document"
-            ></iframe>
-          ) : (
-            <div
-              dangerouslySetInnerHTML={{
-                __html: selectedDocument.content || "",
-              }}
-            />
-          )}
-          <Button
-            onClick={handleAddToResources}
-            disabled={!selectedDocument || isAddingResource}
-          >
-            {isAddingResource ? "Adding..." : "Add to Resources"}
-          </Button>
+        <div style={{ flex: "1 1 50%" }}>
+          <div style={{ marginTop: "20px" }}>
+            <h2>{selectedDocument.title}</h2>
+            {selectedDocument.pdfUrl ? (
+              <iframe
+                src={selectedDocument.pdfUrl}
+                width="100%"
+                height="500px"
+                title="PDF Document"
+              ></iframe>
+            ) : (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: selectedDocument.content || "",
+                }}
+              />
+            )}
+            {!selectedDocument.pdfUrl && (
+              <>
+                
+                  <EditDocument
+                    documentId={selectedDocument.id}
+                    initialTitle={selectedDocument.title}
+                    initialContent={selectedDocument.content || ""}
+                  />
+                
+              </>
+            )}
+            <Button
+              onClick={handleAddToResources}
+              disabled={!selectedDocument || isAddingResource}
+            >
+              {isAddingResource ? "Adding..." : "Add to Resources"}
+            </Button>
+          </div>
         </div>
       )}
     </div>
