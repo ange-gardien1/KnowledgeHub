@@ -17,7 +17,7 @@ export const getResourcesWithDocuments = protectedProcedure.query(async ({ ctx }
     })
     .from(resources)
     .innerJoin(documents, sql`${resources.documentId} = ${documents.id}`)
-    .where(sql`${resources.userId} = ${userId}`);
+    
 
   return resourcesWithDocuments.map(({ resource, document }) => ({
     resourceId: resource.id,
