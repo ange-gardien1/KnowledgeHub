@@ -11,7 +11,7 @@ export const uploadDocument = protectedProcedure
     z.object({
       title: z.string(),
       content: z.string().optional(),
-      type: z.enum(["pdf"]),
+      type: z.enum(["pdf","text"]),
       pdfUrl: z.string().optional(),
     })
   )

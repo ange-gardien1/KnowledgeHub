@@ -178,10 +178,12 @@ export const comments = pgTable('comments', {
 export const resources = pgTable('resources', {
   id: uuid('id').primaryKey(),
   userId: uuid('user_id').references(() => users.id),
-  title: varchar('title', { length: 255 }).notNull(),
-  url: varchar('url', { length: 255 }).notNull(),
-  type: varchar('type', { length: 10 }).notNull(),
+  documentId: uuid('document_id'),
+  title: varchar('title', { length: 255 }),
+  url: varchar('url', { length: 255 }),
+  type: varchar('type', { length: 10 }),
   description: text('description'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).default(sql`now()`).notNull(),
 });
+

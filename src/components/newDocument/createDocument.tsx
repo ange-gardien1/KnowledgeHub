@@ -1,4 +1,4 @@
-// Import necessary styles and components
+
 import "./styles.scss";
 import React, { useState } from "react";
 import { trpc } from "@/app/_trpc/client";
@@ -50,7 +50,7 @@ const CreateDocuments: React.FC = () => {
     try {
       await createDocument.mutateAsync({
         title,
-        type: "pdf",
+        type: "text",
         content,
       });
       setTitle("");

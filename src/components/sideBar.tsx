@@ -79,7 +79,7 @@ export default async function Sidebar() {
            <Tooltip>
             <TooltipTrigger asChild>
               <Link
-                href="#"
+                href="resources"
                 className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
               >
 
