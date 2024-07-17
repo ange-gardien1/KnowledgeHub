@@ -4,7 +4,7 @@ import { documents } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 
-// Define the input schema for the documentId
+
 const getDocumentByIdInput = z.object({
   documentId: z.string().uuid(),
 });
