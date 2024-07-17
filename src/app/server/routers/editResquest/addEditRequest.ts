@@ -43,7 +43,7 @@ export const createEditRequest = protectedProcedure
         id: sql`gen_random_uuid()`,
         userId: document.userId, 
         type: 'edit_request',
-        message: `Edit request for document ${documentId}`,
+        message: `Edit request for document ${document.title}`,
         read: false,
         createdAt: sql`now()`,
       });

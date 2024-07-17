@@ -1,4 +1,5 @@
 "use client";
+
 import CreateDocuments from "@/components/newDocument/createDocument";
 import DocumentUpload from "@/components/newDocument/uploadDocument";
 import React from "react";
@@ -12,6 +13,7 @@ function Createdocument() {
       <div>
         <CreateDocuments />
       </div>
+     
     </div>
   );
 }

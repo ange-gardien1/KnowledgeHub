@@ -1,16 +1,19 @@
-"use client";
 
-import React from "react";
-import GetNotifications from "./notifications";
+import React from 'react'
+import GetNotifications from './notifications'
+
+
 
 function ProfilePage() {
+    
   return (
-    <div>
-      {/* <Sidebar/> */}
+   <div>
+    {/* <Sidebar/> */}
 
-      <GetNotifications />
-    </div>
-  );
+   <GetNotifications/>
+
+   </div>
+  )
 }
 
-export default ProfilePage;
+export default ProfilePage
