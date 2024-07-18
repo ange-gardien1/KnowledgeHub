@@ -1,6 +1,6 @@
 
 import React from 'react'
-import GetNotifications from './notifications'
+
 
 
 
@@ -10,7 +10,7 @@ function ProfilePage() {
    <div>
     {/* <Sidebar/> */}
 
-   <GetNotifications/>
+<h1> hello</h1>
 
    </div>
   )
