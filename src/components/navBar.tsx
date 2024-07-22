@@ -17,11 +17,12 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "./ui/button";
 import NotificationSheet, { useNotifications } from "./notificationSheet";
+import { trpc } from "@/app/_trpc/client";
 
 
 export const Navbar = () => {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-  const { data, isLoading } = useNotifications();
+  const { data, isLoading } = trpc.notification.getNotificationByStatus.useQuery();
 
 //   if (!session) return null;
 

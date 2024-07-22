@@ -9,6 +9,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { format } from "date-fns";
 
 type Resource = {
   resourceId: string;
@@ -116,12 +117,14 @@ const GetResources = () => {
                 }}
               />
             )}
-            <p>Created At: {selectedResource.createdAt}</p>
+            <p className="text-sm text-gray-500">Created At : 
+            {format(new Date (selectedResource.createdAt), "PPpp")}
+             </p>
             <Popover>
               <PopoverTrigger asChild>
                 {/* <Button onClick={() => setIsRequestingEdit(true)}>Request Edit</Button> */}
                 <Button onClick={handleRequestEdit}>
-                  {isRequestingEdit ? "Submitting..." : "Submit Request"}
+                  {isRequestingEdit ? "Submitting..." : "Send Edit Request"}
                 </Button>
               </PopoverTrigger>
             </Popover>

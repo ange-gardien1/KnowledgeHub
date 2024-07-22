@@ -1,8 +1,13 @@
 import { usersRouter } from "./routers";
 import { comments } from "./routers/comments";
 import { documentsRouter } from "./routers/documents";
+import { RequestRouter } from "./routers/editResquest";
 import { createEditRequest } from "./routers/editResquest/addEditRequest";
+import { notificationRouter } from "./routers/notifications";
+
 import { getNotificationByUserId } from "./routers/notifications/getNotification";
+import { getNotificationByStatus } from "./routers/notifications/getNotificationByStatus";
+// import { markNotificationAsRead } from "./routers/notifications/updateNotification";
 import { resources } from "./routers/resources";
 import { router } from "./trpc";
 export const appRouter = router({
@@ -11,6 +16,9 @@ export const appRouter = router({
   comments: comments,
   resources: resources,
   editRequest:createEditRequest,
-  getNotificationByUserId: getNotificationByUserId
+  getNotificationByUserId: getNotificationByUserId,
+  notification: notificationRouter,
+  request:RequestRouter
+
 });
 export type AppRouter = typeof appRouter;
