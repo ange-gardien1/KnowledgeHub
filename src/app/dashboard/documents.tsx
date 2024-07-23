@@ -20,12 +20,29 @@ const GetDocuments = () => {
   const addResourceMutation = trpc.resources.addResourceByDocumentId.useMutation();
   const [isAddingResource, setIsAddingResource] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const deleteDocumentMutation = trpc.documents.deleteDocumentById.useMutation();
 
   const handleDocumentClick = (document: Document) => {
     setSelectedDocument(document);
     setIsEditing(false); 
   };
+  const handleDelete = async () => {
+    if (!selectedDocument) return;
 
+    try {
+      const response = await deleteDocumentMutation.mutateAsync({ id: selectedDocument.id });
+      if (response.document) {
+        alert("Document deleted successfully!");
+        setSelectedDocument(null); // Clear the selected document after deletion
+        // refetch(); // Refetch documents to update the list
+      } else {
+        alert("Failed to delete document.");
+      }
+    } catch (error) {
+      console.error("Failed to delete document:", error);
+      alert("Failed to delete document. Please try again.");
+    }
+  };
   const handleAddToResources = async () => {
     if (!selectedDocument) return;
 
@@ -119,6 +136,13 @@ const GetDocuments = () => {
                 
               </>
             )}
+            <Button
+              onClick={handleDelete}
+              disabled={!selectedDocument}
+              // variant="danger"
+            >
+              Delete Document
+            </Button>
             <Button
               onClick={handleAddToResources}
               disabled={!selectedDocument || isAddingResource}

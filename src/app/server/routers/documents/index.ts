@@ -1,4 +1,5 @@
 import { router } from "../../trpc";
+import { deleteDocument } from "./deleteDocument";
 import { getAllDocuments } from "./getAllDocuments";
 import { getDocumentById } from "./getDocumentById";
 import { getDocumentsByUserId } from "./getDocumentByUserId";
@@ -10,5 +11,6 @@ export const documentsRouter = router({
   newDocument: uploadDocument,
   getDocumentsByUserId: getDocumentsByUserId,
   editDocument:updateDocument,
-  getDocumentById: getDocumentById
+  getDocumentById: getDocumentById,
+  deleteDocumentById: deleteDocument
 });

@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { trpc } from "@/app/_trpc/client";
 import { IconEdit } from "@tabler/icons-react";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Highlight from "@tiptap/extension-highlight";
@@ -11,10 +15,14 @@ import MenuBar from "./menuBar";
 type EditDocumentProps = {
   documentId: string;
   initialTitle: string;
-  initialContent: string; 
+  initialContent: string;
 };
 
-const EditDocument: React.FC<EditDocumentProps> = ({ documentId, initialTitle, initialContent }) => {
+const EditDocument: React.FC<EditDocumentProps> = ({
+  documentId,
+  initialTitle,
+  initialContent,
+}) => {
   const updateDocument = trpc.documents.editDocument.useMutation();
   const [title, setTitle] = useState<string>(initialTitle);
   const [error, setError] = useState<string | null>(null);
@@ -64,7 +72,7 @@ const EditDocument: React.FC<EditDocumentProps> = ({ documentId, initialTitle, i
 
   return (
     <div className="relative flex justify-end p-4">
-     <Popover>
+      <Popover>
         <PopoverTrigger asChild>
           <button className="button gap-2 bg-primary-500 hover:bg-primary-600 text-highlight-300 flex items-center p-2 rounded">
             <IconEdit size={16} stroke={2} strokeLinejoin="miter" />
@@ -72,7 +80,7 @@ const EditDocument: React.FC<EditDocumentProps> = ({ documentId, initialTitle, i
           </button>
         </PopoverTrigger>
 
-        <PopoverContent  className="w-[60vw] h-[80vh] p-4 bg-white rounded shadow-lg overflow-auto">
+        <PopoverContent className="w-[60vw] h-[80vh] p-4 bg-white rounded shadow-lg overflow-auto">
           <div className="flex flex-col pb-5 h-full">
             <div className="sticky top-0 z-20 flex items-center bg-white py-3 text-xs dark:bg-hc-darkgray-50">
               <h2 className="text-sm font-bold text-hc-gray-800 dark:text-gray-200 xl:text-base">
@@ -84,14 +92,16 @@ const EditDocument: React.FC<EditDocumentProps> = ({ documentId, initialTitle, i
                   className="button text-hc-blue-900 dark:bg-hc-darkgray-200 dark:text-gray-300 bg-hc-blue-50 gap-2 p-2 rounded"
                   onClick={() => {
                     setTitle(initialTitle);
-                    editor?.commands.setContent(initialContent || ''); 
+                    editor?.commands.setContent(initialContent || "");
                     setError(null);
                   }}
                 >
                   Cancel
                 </button>
                 <button
-                  className={`button w-fit text-highlight-300 bg-primary-500 gap-2 p-2 rounded ${submitting ? "opacity-50" : ""}`}
+                  className={`button w-fit text-highlight-300 bg-primary-500 gap-2 p-2 rounded ${
+                    submitting ? "opacity-50" : ""
+                  }`}
                   onClick={handleSubmit}
                   type="submit"
                   disabled={submitting}
@@ -102,7 +112,10 @@ const EditDocument: React.FC<EditDocumentProps> = ({ documentId, initialTitle, i
             </div>
             <div className="mt-10 flex-grow">
               <div className="mb-4">
-                <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label
+                  htmlFor="title"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                >
                   Title
                 </label>
                 <input
@@ -114,7 +127,10 @@ const EditDocument: React.FC<EditDocumentProps> = ({ documentId, initialTitle, i
                 />
               </div>
               <div className="mb-4 flex-grow">
-                <label htmlFor="content" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label
+                  htmlFor="content"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                >
                   Content
                 </label>
 
