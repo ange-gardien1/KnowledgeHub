@@ -1,4 +1,4 @@
-// // components/NotificationSheet.tsx
+// components/NotificationSheet.tsx
 
 // import { trpc } from "@/app/_trpc/client";
 // import {
@@ -51,7 +51,8 @@
 
 
 
-// components/NotificationSheet.tsx
+
+
 
 import { trpc } from "@/app/_trpc/client";
 import {
@@ -66,8 +67,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"; // Adjust the import path as per your project structure
-
+} from "@/components/ui/popover"; 
 export const useNotifications = () => {
   return trpc.getNotificationByUserId.useQuery();
 };
@@ -76,6 +76,7 @@ const NotificationSheet = () => {
   const { data, isLoading } = useNotifications();
   const [selectedNotification, setSelectedNotification] = useState<string | null>(null);
   const [requestDetails, setRequestDetails] = useState<any>(null);
+  const [viewNotification, setViewNotification] = useState<string | null>(null);
 
   const fetchRequestDetails = async (notificationId: string) => {
     try {
@@ -84,6 +85,15 @@ const NotificationSheet = () => {
       setSelectedNotification(notificationId);
     } catch (error) {
       console.error("Failed to fetch request details:", error);
+    }
+  };
+
+  const markNotificationAsViewed = async (notificationId: string) => {
+    try {
+      const result = await trpc.notification.markNotificationAsRead.useMutation();
+      setViewNotification(notificationId);
+    } catch (error) {
+      console.error("Failed to update the notification", error);
     }
   };
 
@@ -116,7 +126,7 @@ const NotificationSheet = () => {
             <p className="text-sm text-gray-500">
               {format(new Date(notification.createdAt), "PPpp")}
             </p>
-            <Popover key={notification.id}>
+            <Popover>
               <PopoverTrigger>
                 <button
                   className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md"
@@ -149,6 +159,12 @@ const NotificationSheet = () => {
                 </PopoverContent>
               )}
             </Popover>
+            <button
+              className="mt-2 px-4 py-2 bg-green-500 text-white rounded-md"
+              onClick={() => markNotificationAsViewed(notification.id)}
+            >
+              Mark as Viewed
+            </button>
           </div>
         ))}
       </div>

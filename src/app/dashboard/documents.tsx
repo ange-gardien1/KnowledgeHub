@@ -139,7 +139,6 @@ const GetDocuments = () => {
             <Button
               onClick={handleDelete}
               disabled={!selectedDocument}
-              // variant="danger"
             >
               Delete Document
             </Button>
