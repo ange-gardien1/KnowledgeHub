@@ -1,5 +1,6 @@
 import { router } from "../../trpc";
 import { getNotificationByUserId } from "./getNotification";
+import { getNotificationById } from "./getNotificationById";
 import { getNotificationByStatus } from "./getNotificationByStatus";
 import { markNotificationAsRead } from "./updateNotification";
 // import { markNotificationAsRead } from "./updateNotification";
@@ -9,4 +10,5 @@ export const notificationRouter = router({
     getNotificationByStatus:getNotificationByStatus,
     // markNotificationAsRead:markNotificationAsRead
     markNotificationAsRead: markNotificationAsRead,
+    getNotificationById:getNotificationById
 })
