@@ -25,8 +25,8 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function DocumentCount() {
-  const { data } = trpc.documents.userTextDocuments.useQuery();
+export function TextDocumentCount() {
+  const { data } = trpc.documents.userPdfDocuments.useQuery();
   const documentCount = data?.length || 0;
 
   const chartData = [{ name: "PDF Documents", count: documentCount }];
@@ -35,7 +35,7 @@ export function DocumentCount() {
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
         <CardTitle>Document Count</CardTitle>
-        <CardDescription>Current Count of Text Documents</CardDescription>
+        <CardDescription>Current Count of PDF Documents</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-1 items-center pb-0">
         <ChartContainer
@@ -70,7 +70,7 @@ export function DocumentCount() {
                           y={(viewBox.cy || 0) + 4}
                           className="fill-muted-foreground"
                         >
-                          Text Documents
+                         PDF Documents
                         </tspan>
                       </text>
                     );
@@ -89,7 +89,7 @@ export function DocumentCount() {
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="leading-none text-muted-foreground">
-          Showing total Text document count
+          Showing total PDF document count
         </div>
       </CardFooter>
     </Card>

@@ -1,6 +1,6 @@
 // pages/index.tsx
-import React from 'react'
-import Image from 'next/image'
+import React from 'react';
+import Image from 'next/image';
 
 const Index = () => {
   return (
@@ -36,21 +36,24 @@ const Index = () => {
           </video>
 
           <div className="relative z-10 flex justify-center space-x-8">
-            <Image
-              src="https://online.keele.ac.uk/wp-content/uploads/2023/11/02_Computer-systems.jpg"
-              alt="Desktop Mockup"
-              className="shadow-xl rounded-lg max-w-full h-auto"
-              width={600}
-              height={400}
-            />
-          
-            <Image
-              src="https://latestmodapks.com/wp-content/uploads/2023/01/Files-1.jpeg"
-              alt="Mobile Mockup"
-              className="shadow-xl rounded-lg max-w-full h-auto"
-              width={450}
-              height={400}
-            />
+            <div className="relative w-[600px] h-[400px]">
+              <Image
+                src="https://online.keele.ac.uk/wp-content/uploads/2023/11/02_Computer-systems.jpg"
+                alt="Desktop Mockup"
+                layout="fill"
+                objectFit="cover"
+                className="rounded-2xl shadow-2xl"
+              />
+            </div>
+            <div className="relative w-[450px] h-[400px]">
+              <Image
+                src="https://latestmodapks.com/wp-content/uploads/2023/01/Files-1.jpeg"
+                alt="Mobile Mockup"
+                layout="fill"
+                objectFit="cover"
+                className="rounded-2xl shadow-2xl"
+              />
+            </div>
           </div>
         </div>
       </main>
@@ -61,7 +64,7 @@ const Index = () => {
         </div>
       </footer>
     </div>
-  )
+  );
 }
 
-export default Index
+export default Index;

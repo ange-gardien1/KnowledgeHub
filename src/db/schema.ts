@@ -115,11 +115,21 @@ export const authenticators = pgTable(
   })
 );
 
+export const projects = pgTable('projects', {
+  id: uuid('id').primaryKey().default(sql`gen_random_uuid()`),
+  userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  name: varchar('name', { length: 255 }).notNull(),
+  description: text('description'),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).default(sql`now()`).notNull(),
+});
+
 export const documents = pgTable('documents', {
   id: uuid('id').primaryKey().default(sql`gen_random_uuid()`),
   userId: uuid("userId")
-  .notNull()
-  .references(() => users.id, { onDelete: "cascade" }),
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  projectId: uuid("project_id").references(() => projects.id), // New column to link documents to a project
   title: varchar('title', { length: 255 }).notNull(),
   content: text('content'),
   type: varchar('type', { length: 4 }).notNull().default(DocumentType.TEXT),
