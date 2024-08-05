@@ -2,6 +2,7 @@ import { router } from "../../trpc";
 import { deleteDocument } from "./deleteDocument";
 import { getAllDocuments } from "./getAllDocuments";
 import { getDocumentById } from "./getDocumentById";
+import { getDocumentsByProject } from "./getDocumentByProjectId";
 import { getDocumentsByUserId } from "./getDocumentByUserId";
 import { getPdfDocumentsByUserId } from "./getPdfDocumentbyuserId";
 import { getTextDocumentByUserId } from "./getTextDocumentByUserId";
@@ -16,5 +17,6 @@ export const documentsRouter = router({
   getDocumentById: getDocumentById,
   deleteDocumentById: deleteDocument,
   userPdfDocuments: getPdfDocumentsByUserId,
-  userTextDocuments:getTextDocumentByUserId
+  userTextDocuments:getTextDocumentByUserId,
+  getDocumentByProject:getDocumentsByProject
 });

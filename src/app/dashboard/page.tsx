@@ -28,7 +28,7 @@ export default async function Dashboardpage() {
         </div>
         <GetDocuments />
       </div>
-      <GetRequest/>
+      {/* <GetRequest/> */}
     </div>
   );
 }

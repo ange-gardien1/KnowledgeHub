@@ -5,6 +5,7 @@ import React from 'react'
 import Createdocument from './newDocument'
 import GetDocuments from '../dashboard/documents'
 import Tiptap from '@/components/Tiptap'
+import GetProjects from '../projects/getProjects'
 
 
 
@@ -17,9 +18,10 @@ function documents() {
         <div>
        <Createdocument/>
         </div>
-      <GetDocuments/>
+        <GetProjects/>
       <Tiptap/>
       </div>
+     
     </div>
   )
 }

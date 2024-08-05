@@ -7,6 +7,7 @@ import { notificationRouter } from "./routers/notifications";
 
 import { getNotificationByUserId } from "./routers/notifications/getNotification";
 import { getNotificationByStatus } from "./routers/notifications/getNotificationByStatus";
+import { projectsRouter } from "./routers/projects";
 // import { markNotificationAsRead } from "./routers/notifications/updateNotification";
 import { resources } from "./routers/resources";
 import { router } from "./trpc";
@@ -18,7 +19,8 @@ export const appRouter = router({
   editRequest:createEditRequest,
   getNotificationByUserId: getNotificationByUserId,
   notification: notificationRouter,
-  request:RequestRouter
+  request:RequestRouter,
+  projects:projectsRouter
 
 });
 export type AppRouter = typeof appRouter;
