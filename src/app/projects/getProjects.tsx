@@ -1,10 +1,12 @@
-'use client'
+'use client';
 import React, { useState } from "react";
 import { trpc } from "../_trpc/client";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { IconFolder, IconPdf, IconTxt } from "@tabler/icons-react";
+import { IconFolder, IconPdf, IconTxt, IconPlus } from "@tabler/icons-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import DocumentUpload from "@/components/newDocument/uploadDocument";
+import CreateDocuments from "@/components/newDocument/createDocument";
 import EditDocument from "@/components/editDocument";
 
 type Project = {
@@ -25,10 +27,11 @@ const GetProjects = () => {
   const { data: projects, isLoading: isLoadingProjects, error: errorProjects } = trpc.projects.getUserProjects.useQuery();
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
+  const [isCreatingDocument, setIsCreatingDocument] = useState(false);
 
   const { data: documents, isLoading: isLoadingDocuments, error: errorDocuments } = trpc.documents.getDocumentByProject.useQuery(
-    { projectId: selectedProjectId! }, // Non-null assertion
-    { enabled: !!selectedProjectId } // Only fetch if `selectedProjectId` is not null
+    { projectId: selectedProjectId! }, 
+    { enabled: !!selectedProjectId } 
   );
 
   const handleProjectClick = (projectId: string) => {
@@ -68,8 +71,7 @@ const GetProjects = () => {
                   <h3>{project.name} project</h3>
                 </CardContent>
                 <CardFooter>
-                 
-                  <p>{project.description}</p>  -
+                  <p>{project.description}</p> -
                   <p>Created at: {new Date(project.createdAt).toLocaleDateString()}</p>
                 </CardFooter>
               </Card>
@@ -88,7 +90,7 @@ const GetProjects = () => {
               ) : errorDocuments ? (
                 <div>Error fetching documents: {errorDocuments.message}</div>
               ) : documents && documents.length > 0 ? (
-                documents.map((document:any ) => (
+                documents.map((document: Document) => (
                   <div
                     key={document.id}
                     style={{ flex: "0 1 23%", marginBottom: "10px", cursor: "pointer" }}
@@ -118,6 +120,39 @@ const GetProjects = () => {
                 <div>No documents found for this project</div>
               )}
             </div>
+          </div>
+
+          <div style={{ marginTop: "20px" }}>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button className="bg-primary-500 hover:bg-primary-600 text-highlight-300 flex items-center p-2 rounded">
+                  <IconPlus size={16} stroke={2} strokeLinejoin="miter" />
+                  Add Document
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="max-w-lg p-4 bg-white rounded shadow-lg">
+                {isCreatingDocument ? (
+                  <div className="flex flex-col gap-4">
+                    <CreateDocuments projectId={selectedProjectId} />
+                    <DocumentUpload projectId={selectedProjectId} />
+                    <Button
+                      onClick={() => setIsCreatingDocument(false)}
+                      className="mt-4 bg-red-500 text-white"
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                ) : (
+                  <Button
+                    onClick={() => setIsCreatingDocument(true)}
+                    className="bg-primary-500 hover:bg-primary-600 text-highlight-300 flex items-center p-2 rounded"
+                  >
+                    <IconPlus size={16} stroke={2} strokeLinejoin="miter" />
+                    Create or Upload Document
+                  </Button>
+                )}
+              </PopoverContent>
+            </Popover>
           </div>
 
           {selectedDocument && (

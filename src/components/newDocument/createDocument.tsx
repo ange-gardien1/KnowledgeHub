@@ -1,5 +1,3 @@
-
-import "./styles.scss";
 import React, { useState } from "react";
 import { trpc } from "@/app/_trpc/client";
 import { IconPlus } from "@tabler/icons-react";
@@ -14,7 +12,11 @@ import Highlight from "@tiptap/extension-highlight";
 import TextAlign from "@tiptap/extension-text-align";
 import MenuBar from "../menuBar";
 
-const CreateDocuments: React.FC = () => {
+interface CreateDocumentsProps {
+  projectId: string; // Add projectId prop
+}
+
+const CreateDocuments: React.FC<CreateDocumentsProps> = ({ projectId }) => {
   const [title, setTitle] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -52,6 +54,7 @@ const CreateDocuments: React.FC = () => {
         title,
         type: "text",
         content,
+        projectId, // Pass projectId to the mutation
       });
       setTitle("");
       editor?.commands.setContent("");

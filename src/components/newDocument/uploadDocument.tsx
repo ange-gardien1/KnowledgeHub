@@ -1,13 +1,13 @@
-import { trpc } from "@/app/_trpc/client";
 import React, { useState, useRef } from "react";
+import { trpc } from "@/app/_trpc/client";
 import { IconPlus, IconTrashX, IconPhotoPlus } from "@tabler/icons-react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
-const DocumentUpload: React.FC = () => {
+interface DocumentUploadProps {
+  projectId: string; 
+}
+
+const DocumentUpload: React.FC<DocumentUploadProps> = ({ projectId }) => {
   const [title, setTitle] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -19,7 +19,12 @@ const DocumentUpload: React.FC = () => {
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0] || null;
-    setFile(selectedFile);
+    if (selectedFile && selectedFile.size <= 25 * 1024 * 1024) { // Limit file size to 25MB
+      setFile(selectedFile);
+      setError(null);
+    } else {
+      setError("File is too large or invalid");
+    }
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -41,8 +46,9 @@ const DocumentUpload: React.FC = () => {
       try {
         await uploadDocument.mutateAsync({
           title,
-          type: file.type === "application/pdf"  ? "pdf" : "pdf",
+          type: file.type === "application/pdf" ? "pdf" : "pdf",
           pdfUrl: base64File,
+          projectId, // Pass projectId here
         });
         setTitle("");
         setFile(null);
@@ -62,9 +68,7 @@ const DocumentUpload: React.FC = () => {
   };
 
   const handleIconClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
+    fileInputRef.current?.click();
   };
 
   const handleDelete = () => {
@@ -90,12 +94,18 @@ const DocumentUpload: React.FC = () => {
               <div className="ml-auto flex gap-4">
                 <button
                   className="button text-hc-blue-900 dark:bg-hc-darkgray-200 dark:text-gray-300 bg-hc-blue-50 gap-2 p-2 rounded"
-                  onClick={() => setFile(null)}
+                  onClick={() => {
+                    setTitle("");
+                    setFile(null);
+                    setError(null);
+                  }}
                 >
                   Cancel
                 </button>
                 <button
-                  className={`button w-fit text-highlight-300 bg-primary-500 gap-2 p-2 rounded ${submitting ? 'opacity-50' : ''}`}
+                  className={`button w-fit text-highlight-300 bg-primary-500 gap-2 p-2 rounded ${
+                    submitting ? "opacity-50" : ""
+                  }`}
                   onClick={handleSubmit}
                   type="submit"
                   disabled={submitting}
@@ -106,7 +116,12 @@ const DocumentUpload: React.FC = () => {
             </div>
             <div className="mt-10">
               <div className="mb-4">
-                <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Title</label>
+                <label
+                  htmlFor="title"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                >
+                  Title
+                </label>
                 <input
                   type="text"
                   id="title"

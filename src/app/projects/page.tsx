@@ -2,6 +2,7 @@
 import { redirect } from "next/navigation";
 import { auth } from "../auth";
 import GetProjects from "./getProjects";
+import ProjectCreate from "./createProject";
 
 export default async function projects() {
     const session = await auth();
@@ -13,8 +14,15 @@ export default async function projects() {
 
     return (
         <div>
+           <div>
             <GetProjects/>
         </div>
+        <div>
+           <ProjectCreate/>
+        </div>
+        </div>
+       
+
     )
     
 }

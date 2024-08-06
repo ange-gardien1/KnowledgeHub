@@ -11,12 +11,13 @@ export const uploadDocument = protectedProcedure
     z.object({
       title: z.string(),
       content: z.string().optional(),
-      type: z.enum(["pdf","text"]),
+      type: z.enum(["pdf", "text"]),
       pdfUrl: z.string().optional(),
+      projectId: z.string(), // Add projectId to the input schema
     })
   )
   .mutation(
-    async ({ input: { title, content, type, pdfUrl }, ctx: { session } }) => {
+    async ({ input: { title, content, type, pdfUrl, projectId }, ctx: { session } }) => {
       if (!session?.user?.id) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
@@ -49,6 +50,7 @@ export const uploadDocument = protectedProcedure
           content,
           type,
           pdfUrl: fileUrl,
+          projectId, // Include projectId in the document creation
           createdAt: new Date(),
           updatedAt: new Date(),
         });
