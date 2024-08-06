@@ -32,8 +32,7 @@ export default async function Sidebar() {
     const user = session?.user?.id
 
   return (
-    <div className="flex min-h-screen  flex-col bg-white">
-      <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
+      <aside className="fixed min-h-screen  bg-white inset-y-0 left-0 z-20 hidden w-14 flex-col border-r bg-background sm:flex">
         <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
      
         
@@ -128,6 +127,5 @@ export default async function Sidebar() {
         </nav>
       </aside>
      
-    </div>
   )
 }

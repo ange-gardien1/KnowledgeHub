@@ -12,7 +12,7 @@ enum RequestType {
   DELETE = 'delete'
 }
 
-enum StatusType {
+export enum StatusType {
   PENDING = 'pending',
   APPROVED = 'approved',
   REJECTED = 'rejected'

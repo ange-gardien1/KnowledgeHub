@@ -15,7 +15,7 @@ export const deleteDocument = protectedProcedure
     if (!session?.user?.id) {
       throw new TRPCError({
         code: "UNAUTHORIZED",
-        message: "yo must be logged in to delete a document",
+        message: "You must be logged in to delete a document",
       });
     }
     try {
@@ -23,13 +23,13 @@ export const deleteDocument = protectedProcedure
         .delete(documents)
         .where(eq(documents.id, id))
         .returning();
-      if (!deleteDocument) {
+      if (deletedDocument.length === 0) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Document not found",
         });
       }
-      return { document: deletedDocument };
+      return { document: deletedDocument[0] };
     } catch (err: any) {
       throw new TRPCError({
         code: "INTERNAL_SERVER_ERROR",

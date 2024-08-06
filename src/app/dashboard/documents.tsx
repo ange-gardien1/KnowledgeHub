@@ -5,7 +5,6 @@ import { IconPdf, IconTxt } from "@tabler/icons-react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import EditDocument from "@/components/editDocument";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 type Document = {
   id: string;
@@ -15,34 +14,39 @@ type Document = {
 };
 
 const GetDocuments = () => {
-  const { data, isLoading } = trpc.documents.getDocumentsByUserId.useQuery();
+  const { data, isLoading, refetch } = trpc.documents.getDocumentsByUserId.useQuery();
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
   const addResourceMutation = trpc.resources.addResourceByDocumentId.useMutation();
   const [isAddingResource, setIsAddingResource] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const deleteDocumentMutation = trpc.documents.deleteDocumentById.useMutation();
+  const deleteDocumentMutation = trpc.documents.deleteDocumentById.useMutation({
+    onSuccess: () => {
+      refetch(); // Refetch documents to update the list
+      setSelectedDocument(null); // Clear the selected document after deletion
+    },
+    onError: (error) => {
+      console.error("Failed to delete document:", error);
+      alert("Failed to delete document. Please try again.");
+    }
+  });
 
   const handleDocumentClick = (document: Document) => {
     setSelectedDocument(document);
     setIsEditing(false); 
   };
+
   const handleDelete = async () => {
     if (!selectedDocument) return;
 
     try {
-      const response = await deleteDocumentMutation.mutateAsync({ id: selectedDocument.id });
-      if (response.document) {
-        alert("Document deleted successfully!");
-        setSelectedDocument(null); // Clear the selected document after deletion
-        // refetch(); // Refetch documents to update the list
-      } else {
-        alert("Failed to delete document.");
-      }
+      await deleteDocumentMutation.mutateAsync({ id: selectedDocument.id });
+      alert("Document deleted successfully!");
     } catch (error) {
       console.error("Failed to delete document:", error);
       alert("Failed to delete document. Please try again.");
     }
   };
+
   const handleAddToResources = async () => {
     if (!selectedDocument) return;
 
@@ -127,13 +131,11 @@ const GetDocuments = () => {
             )}
             {!selectedDocument.pdfUrl && (
               <>
-                
-                  <EditDocument
-                    documentId={selectedDocument.id}
-                    initialTitle={selectedDocument.title}
-                    initialContent={selectedDocument.content || ""}
-                  />
-                
+                <EditDocument
+                  documentId={selectedDocument.id}
+                  initialTitle={selectedDocument.title}
+                  initialContent={selectedDocument.content || ""}
+                />
               </>
             )}
             <Button
@@ -156,4 +158,3 @@ const GetDocuments = () => {
 };
 
 export default GetDocuments;
-

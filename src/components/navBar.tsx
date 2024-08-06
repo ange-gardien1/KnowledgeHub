@@ -33,7 +33,7 @@ export const Navbar = () => {
   const notificationCount = data?.length || 0;
 
   return (
-    <div className="fixed flex items-center top-0 border-b h-14 z-20 bg-white w-full">
+    <div className="fixed flex items-center top-0 border-b h-14 z-10 bg-white w-full">
       <div className="flex ml-auto items-center pr-16 gap-2">
         <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
           <SheetTrigger asChild>
