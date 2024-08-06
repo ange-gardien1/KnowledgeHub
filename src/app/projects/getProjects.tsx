@@ -56,22 +56,24 @@ const GetProjects = () => {
   }
 
   return (
-    <div style={{ display: "flex", gap: "20px" }}>
-      <div style={{ flex: "1 1 50%", marginRight: "20px" }}>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+    <div className="flex">
+      {/* Left Side: Project List */}
+      <div className="w-1/3 p-4 border-r border-gray-200">
+        <h2 className="text-lg font-bold mb-4">Projects</h2>
+        <div className="space-y-4">
           {projects.map(project => (
             <div
               key={project.id}
-              style={{ flex: "0 1 23%", marginBottom: "10px", cursor: "pointer" }}
+              className="cursor-pointer"
               onClick={() => handleProjectClick(project.id)}
             >
-              <Card>
+              <Card className="w-60">
                 <CardContent>
-                  <IconFolder stroke={2} size={90} />
-                  <h3>{project.name} project</h3>
+                  <IconFolder stroke={2} size={60} />
+                  <h3 className="text-md font-semibold">{project.name}</h3>
                 </CardContent>
                 <CardFooter>
-                  <p>{project.description}</p> -
+                  <p>{project.description}</p>
                   <p>Created at: {new Date(project.createdAt).toLocaleDateString()}</p>
                 </CardFooter>
               </Card>
@@ -80,109 +82,128 @@ const GetProjects = () => {
         </div>
       </div>
 
-      {selectedProjectId && (
-        <div style={{ flex: "1 1 50%" }}>
-          <div style={{ marginTop: "20px" }}>
-            <h2>Documents in this project:</h2>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+      {/* Right Side: Documents and Document Details */}
+      <div className="w-2/3 p-4">
+        {selectedProjectId && (
+          <div>
+            <h2 className="text-lg font-bold mb-4">Documents in this project:</h2>
+            
+            {/* Document List */}
+            <div className="mb-4">
               {isLoadingDocuments ? (
                 <div>Loading documents...</div>
               ) : errorDocuments ? (
                 <div>Error fetching documents: {errorDocuments.message}</div>
               ) : documents && documents.length > 0 ? (
-                documents.map((document: Document) => (
-                  <div
-                    key={document.id}
-                    style={{ flex: "0 1 23%", marginBottom: "10px", cursor: "pointer" }}
-                    onClick={() => handleDocumentClick(document)}
-                  >
-                    <Card>
-                      <CardContent>
-                        {document.pdfUrl ? (
-                          <a
-                            href={document.pdfUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <IconPdf stroke={2} size={90} />
-                          </a>
-                        ) : (
-                          <IconTxt stroke={2} size={90} />
-                        )}
-                      </CardContent>
-                      <CardFooter>
-                        {document.title}
-                      </CardFooter>
-                    </Card>
-                  </div>
-                ))
-              ) : (
-                <div>No documents found for this project</div>
-              )}
-            </div>
-          </div>
-
-          <div style={{ marginTop: "20px" }}>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button className="bg-primary-500 hover:bg-primary-600 text-highlight-300 flex items-center p-2 rounded">
-                  <IconPlus size={16} stroke={2} strokeLinejoin="miter" />
-                  Add Document
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="max-w-lg p-4 bg-white rounded shadow-lg">
-                {isCreatingDocument ? (
-                  <div className="flex flex-col gap-4">
-                    <CreateDocuments projectId={selectedProjectId} />
-                    <DocumentUpload projectId={selectedProjectId} />
-                    <Button
-                      onClick={() => setIsCreatingDocument(false)}
-                      className="mt-4 bg-red-500 text-white"
+                <div className="space-y-4">
+                  {documents.map((document: Document) => (
+                    <div
+                      key={document.id}
+                      className="cursor-pointer"
+                      onClick={() => handleDocumentClick(document)}
                     >
-                      Cancel
-                    </Button>
-                  </div>
-                ) : (
+                      <Card className="w-60">
+                        <CardContent>
+                          {document.pdfUrl ? (
+                            <a
+                              href={document.pdfUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <IconPdf stroke={2} size={60} />
+                            </a>
+                          ) : (
+                            <IconTxt stroke={2} size={60} />
+                          )}
+                        </CardContent>
+                        <CardFooter>
+                          {document.title}
+                        </CardFooter>
+                      </Card>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="flex items-center gap-4">
+                  <p>No documents found for this project</p>
                   <Button
                     onClick={() => setIsCreatingDocument(true)}
-                    className="bg-primary-500 hover:bg-primary-600 text-highlight-300 flex items-center p-2 rounded"
+                    className="bg-primary-500 hover:bg-primary-600 text-white flex items-center p-2 rounded"
                   >
-                    <IconPlus size={16} stroke={2} strokeLinejoin="miter" />
-                    Create or Upload Document
+                    <IconPlus size={16} stroke={2} />
+                    Add New Document
                   </Button>
-                )}
-              </PopoverContent>
-            </Popover>
-          </div>
-
-          {selectedDocument && (
-            <div style={{ marginTop: "20px" }}>
-              <h2>{selectedDocument.title}</h2>
-              {selectedDocument.pdfUrl ? (
-                <iframe
-                  src={selectedDocument.pdfUrl}
-                  width="100%"
-                  height="500px"
-                  title="PDF Document"
-                ></iframe>
-              ) : (
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: selectedDocument.content || "",
-                  }}
-                />
-              )}
-              {!selectedDocument.pdfUrl && (
-                <EditDocument
-                  documentId={selectedDocument.id}
-                  initialTitle={selectedDocument.title}
-                  initialContent={selectedDocument.content || ""}
-                />
+                </div>
               )}
             </div>
-          )}
-        </div>
-      )}
+
+            {/* Add Document Popover */}
+            <div className="mb-4">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button className="bg-primary-500 hover:bg-primary-600 text-white flex items-center p-2 rounded">
+                    <IconPlus size={16} stroke={2} />
+                    Add Document
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="p-4 bg-white rounded shadow-lg">
+                  {isCreatingDocument ? (
+                    <div className="flex flex-col gap-4">
+                      <CreateDocuments projectId={selectedProjectId} />
+                      <DocumentUpload projectId={selectedProjectId} />
+                      <Button
+                        onClick={() => setIsCreatingDocument(false)}
+                        className="mt-4 bg-red-500 text-white"
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  ) : (
+                    <Button
+                      onClick={() => setIsCreatingDocument(true)}
+                      className="bg-primary-500 hover:bg-primary-600 text-white flex items-center p-2 rounded"
+                    >
+                      <IconPlus size={16} stroke={2} />
+                      Create or Upload Document
+                    </Button>
+                  )}
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            {/* Document Preview */}
+            <div>
+              {selectedDocument && (
+                <div>
+                  <h2 className="text-lg font-bold mb-4">{selectedDocument.title}</h2>
+                  {selectedDocument.pdfUrl ? (
+                    <iframe
+                      src={selectedDocument.pdfUrl}
+                      width="100%"
+                      height="600px"
+                      title="PDF Document"
+                      className="border border-gray-200"
+                    ></iframe>
+                  ) : (
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: selectedDocument.content || "",
+                      }}
+                    />
+                  )}
+                  {!selectedDocument.pdfUrl && (
+                    <EditDocument
+                      documentId={selectedDocument.id}
+                      initialTitle={selectedDocument.title}
+                      initialContent={selectedDocument.content || ""}
+                    />
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
