@@ -17,7 +17,7 @@ function documents() {
       <Navbar/>
       <div className="w-full pl-20 pt-4">
         {" "}
-        <div>
+        <div className="flex flex-col gap-4 mt-12 ml-12">
        <Createdocument/>
         </div>
         <GetProjects/>

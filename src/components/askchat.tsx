@@ -1,24 +1,46 @@
-'use client'
-import { useState } from "react";
 
-const AskChat: React.FC = () => {
-  const [prompt, setPrompt] = useState("");
+"use client"
+// components/askchat.tsx
+import { useState } from 'react';
+
+const askChat: React.FC = () => {
+  const [prompt, setPrompt] = useState('');
+  const [response, setResponse] = useState<string | null>(null);
+
+  const handleSubmit = async () => {
+    try {
+      const res = await fetch('/api/openai', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ prompt }),
+      });
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+
+      const data = await res.json();
+      setResponse(data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setResponse('An error occurred. Please try again.');
+    }
+  };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-      <form style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <textarea
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-          placeholder="How My I Help Today"
-          rows={4}
-          cols={50}
-          style={{ marginBottom: '10px', padding: '10px', fontSize: '16px' }}
-        />
-        <button type="submit" style={{ padding: '10px 20px', fontSize: '16px', cursor: 'pointer' }}>Submit</button>
-      </form>
+    <div>
+      <textarea
+        value={prompt}
+        onChange={(e) => setPrompt(e.target.value)}
+        rows={4}
+        cols={50}
+      />
+      <button onClick={handleSubmit}>Submit</button>
+      {response && <div>Response: {response}</div>}
     </div>
   );
 };
 
-export default AskChat;
+export default askChat;
