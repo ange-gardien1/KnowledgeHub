@@ -19,8 +19,8 @@ export function ResourcePopover() {
         await addResourceMutation.mutateAsync({
          
           title,
-          url: link, // Assuming `link` represents the URL
-          type: video ? "video" : "link", // Determine type based on input
+          url: link, 
+          type: video ? "video" : "link",
           description,
         });
         alert("Resource added successfully!");
