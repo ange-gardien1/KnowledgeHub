@@ -8,12 +8,6 @@ import ProjectCreate from "../projects/createProject";
 function Createdocument() {
   return (
     <div className="flex justify-center items-center  space-x-4">
-      {/* <div>
-        <DocumentUpload />
-      </div>
-      <div>
-        <CreateDocuments />
-      </div> */}
      <ProjectCreate/>
     </div>
   );

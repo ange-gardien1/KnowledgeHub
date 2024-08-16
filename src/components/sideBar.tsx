@@ -1,4 +1,4 @@
-import Link from "next/link"
+import Link from "next/link";
 import {
   Home,
   LineChart,
@@ -7,36 +7,33 @@ import {
   PanelLeft,
   Settings,
   ShoppingCart,
-} from "lucide-react"
+} from "lucide-react";
 
-
-import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { auth } from "@/app/auth"
-import { Avatar, AvatarImage } from "./ui/avatar"
+} from "@/components/ui/tooltip";
+import { auth } from "@/app/auth";
+import { Avatar, AvatarImage } from "./ui/avatar";
 
-import { IconCirclePlus } from '@tabler/icons-react';
-import { IconBrandOpenai } from '@tabler/icons-react';
-import { IconShare3 } from '@tabler/icons-react';
-import { IconLayoutDashboard } from '@tabler/icons-react';
+import { IconCirclePlus } from "@tabler/icons-react";
+import { IconBrandOpenai } from "@tabler/icons-react";
+import { IconShare3 } from "@tabler/icons-react";
+import { IconLayoutDashboard } from "@tabler/icons-react";
 
 export default async function Sidebar() {
-    const session = await auth();
-    const user = session?.user?.id
+  const session = await auth();
+  const user = session?.user?.id;
 
   return (
-      <aside className="fixed min-h-screen  bg-white inset-y-0 left-0 z-20 hidden w-14 flex-col border-r bg-background sm:flex">
-        <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
-     
-        
-          <TooltipProvider>
+    <aside className="fixed min-h-screen  bg-white inset-y-0 left-0 z-20 hidden w-14 flex-col border-r bg-background sm:flex">
+      <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
+        <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
@@ -49,9 +46,9 @@ export default async function Sidebar() {
             </TooltipTrigger>
             <TooltipContent side="right">Dashboard</TooltipContent>
           </Tooltip>
-          </TooltipProvider>
-          <TooltipProvider>
-           <Tooltip>
+        </TooltipProvider>
+        <TooltipProvider>
+          <Tooltip>
             <TooltipTrigger asChild>
               <Link
                 href="/documents"
@@ -63,37 +60,36 @@ export default async function Sidebar() {
             </TooltipTrigger>
             <TooltipContent side="right">New Document</TooltipContent>
           </Tooltip>
-          </TooltipProvider>
+        </TooltipProvider>
         <TooltipProvider>
-           <Tooltip>
+          <Tooltip>
             <TooltipTrigger asChild>
               <Link
                 href="resources"
                 className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
               >
-
-<IconShare3 stroke={2} />
+                <IconShare3 stroke={2} />
                 <span className="sr-only">Knowledge Sharing</span>
               </Link>
             </TooltipTrigger>
             <TooltipContent side="right">Knowledge Sharing</TooltipContent>
           </Tooltip>
-          </TooltipProvider>
+        </TooltipProvider>
         <TooltipProvider>
-           <Tooltip>
+          <Tooltip>
             <TooltipTrigger asChild>
               <Link
                 href="/askAi"
                 className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-              >  
+              >
                 <IconBrandOpenai stroke={2} />
                 <span className="sr-only">Ask AI</span>
               </Link>
             </TooltipTrigger>
             <TooltipContent side="right">Ask AI</TooltipContent>
-         </Tooltip>
+          </Tooltip>
         </TooltipProvider>
-   
+
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -108,10 +104,10 @@ export default async function Sidebar() {
             <TooltipContent side="right">Analytics</TooltipContent>
           </Tooltip>
         </TooltipProvider>
-        </nav>
-        <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
-          <TooltipProvider>
-           <Tooltip> 
+      </nav>
+      <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
+        <TooltipProvider>
+          <Tooltip>
             <TooltipTrigger asChild>
               <Link
                 href="#"
@@ -124,8 +120,7 @@ export default async function Sidebar() {
             <TooltipContent side="right">Settings</TooltipContent>
           </Tooltip>
         </TooltipProvider>
-        </nav>
-      </aside>
-     
-  )
+      </nav>
+    </aside>
+  );
 }

@@ -6,7 +6,6 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
-import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 
 type Resource = {
@@ -21,7 +20,7 @@ type Resource = {
   userName: string | null;
 };
 
-const GetResources = () => {
+const GetResourcesDoc = () => {
   const { data, isLoading, error } =
     trpc.resources.getResourcesWithDocuments.useQuery();
   const [selectedResource, setSelectedResource] = useState<Resource | null>(
@@ -63,14 +62,6 @@ const GetResources = () => {
 
   return (
     <div className="flex flex-col gap-4 mt-16 ml-12">
-      <div className="flex items-center space-x-4 text-sm ">
-        <Link href="/resources" className="hover:text-blue-500">Resources Docs</Link>
-        <Separator orientation="vertical" />
-        <Link href="/resources/videos" className="hover:text-blue-500">Resources Videos</Link>
-        <Separator orientation="vertical" />
-        <Link href="/resources/books" className="hover:text-blue-500">Resources Books</Link>
-      </div>
-      <Separator className="my-4" />
       <div className="flex gap-20">
         <div className="flex-1">
           <div className="flex flex-wrap gap-2.5">
@@ -122,13 +113,15 @@ const GetResources = () => {
               <p className="text-sm text-gray-500 mt-2">
                 Created At: {format(new Date(selectedResource.createdAt), "PPpp")}
               </p>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button onClick={handleRequestEdit}>
-                    {isRequestingEdit ? "Submitting..." : "Send Edit Request"}
-                  </Button>
-                </PopoverTrigger>
-              </Popover>
+              {selectedResource.type === "text" && (
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button onClick={handleRequestEdit}>
+                      {isRequestingEdit ? "Submitting..." : "Send Edit Request"}
+                    </Button>
+                  </PopoverTrigger>
+                </Popover>
+              )}
             </div>
           </div>
         )}
@@ -137,6 +130,4 @@ const GetResources = () => {
   );
 };
 
-export default GetResources;
-
-
+export default GetResourcesDoc;

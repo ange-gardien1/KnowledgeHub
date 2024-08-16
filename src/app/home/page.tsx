@@ -19,7 +19,7 @@ const Index = () => {
         <h1 className="text-4xl font-bold mb-4">Get to work, with a lot less work</h1>
         <p className="text-xl mb-8">Knowledge Hub delivers tools that help you move your work forward faster, keep it safe, and let you collaborate with ease.</p>
         <div className="space-x-4">
-          <button className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">Get Started</button>
+          <button className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"> <a href="/signin" className="hover:underline">Get Started</a></button>
           <button className="bg-gray-200 text-gray-800 py-2 px-4 rounded hover:bg-gray-300">Resources</button>
         </div>
 
