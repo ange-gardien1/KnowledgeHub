@@ -4,13 +4,15 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { IconLink } from "@tabler/icons-react"; 
 import { format } from "date-fns";
 import { trpc } from "@/app/_trpc/client";
+import { any } from "zod";
 
 type Resource = {
+    resourceId: string,
   title: string;
   url: string | null; 
   type: string;
   content: string | null;
-  Description: string | null;
+  description: string | null;  // Note: 'description' should be lowercase to match your usage in the code.
   createdAt: string;
   updatedAt: string;
   userName: string | null;
@@ -35,7 +37,7 @@ const GetAllResources = () => {
           <div className="flex flex-wrap gap-2.5">
             {data?.map((resource) => (
               resource.type === "link" && (
-                <div>
+                <div key={resource.userId}> 
                   <Card>
                     <CardContent>
                       <a

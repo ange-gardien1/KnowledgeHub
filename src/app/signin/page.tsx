@@ -96,11 +96,11 @@ export default function SignInPage() {
               type="submit"
               className="w-full py-3 px-4 border border-transparent text-black font-semibold rounded-md shadow-sm bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 flex items-center justify-center"
             >
-              <img
+              {/* <img
                 src="https://developers.google.com/static/identity/images/branding_guide_do_1.png"
                 alt="Google Icon"
                 className="w-6 h-6 mr-2" // Adjust size and margin as needed
-              />
+              /> */}
               Sign in with Google
             </button>
           </form>

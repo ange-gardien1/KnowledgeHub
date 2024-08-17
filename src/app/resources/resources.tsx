@@ -1,10 +1,10 @@
 "use client";
-import { useState } from "react";
+import React, { useState } from "react"; 
 import GetAllResources from "@/components/getResources";
 import GetProjects from "../projects/getProjects";
 import GetResourcesDoc from "./getResources";
 
-function resourcePages() {
+function ResourcePages() {
   const [activeTab, setActiveTab] = useState("documents");
 
   const handleTabClick = (tab: string) => {
@@ -58,4 +58,4 @@ function resourcePages() {
   );
 }
 
-export default resourcePages;
+export default ResourcePages;

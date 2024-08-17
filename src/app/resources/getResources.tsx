@@ -67,7 +67,7 @@ const GetResourcesDoc = () => {
           <div className="flex flex-wrap gap-2.5">
             {data?.map((resource: Resource) => (
               <div
-                key={resource.resourceId}
+                key={resource.resourceId}  
                 className="flex-1 min-w-[18%] mb-2.5 cursor-pointer"
                 onClick={() => handleResourceClick(resource)}
               >

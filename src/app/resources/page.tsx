@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { auth } from "../auth";
 import Sidebar from "@/components/sideBar";
 import { Navbar } from "@/components/navBar";
-import ResourcesPage from "./resourcesPage";
+import ResourcesPage from "./resources";
 
 
 export default async function ResourcesPages() {
