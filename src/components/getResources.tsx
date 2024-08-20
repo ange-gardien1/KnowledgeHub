@@ -12,7 +12,7 @@ type Resource = {
   url: string | null; 
   type: string;
   content: string | null;
-  description: string | null;  // Note: 'description' should be lowercase to match your usage in the code.
+  description: string | null;  
   createdAt: string;
   updatedAt: string;
   userName: string | null;

@@ -179,6 +179,7 @@ export const shares = pgTable('shares', {
 export const comments = pgTable('comments', {
   id: uuid('id').primaryKey(),
   documentId: uuid('document_id').references(() => documents.id),
+  resourceId: uuid('resource_id').references(()=>resources.id),
   userId: uuid('user_id').references(() => users.id),
   content: text('content').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),

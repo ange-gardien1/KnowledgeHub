@@ -1,12 +1,12 @@
 import { redirect } from "next/navigation";
 import { auth } from "../auth";
 import Sidebar from "@/components/sideBar";
-import { Navbar } from "@/components/navBar";
 import GetProjects from "../projects/getProjects";
 import GetRequest from "./EditResquest";
 import { DocumentCount } from "./numberOfDoc";
 import { TextDocumentCount } from "./numberOfUploaded";
 import { ProjectsCount } from "./numberOfProjects";
+import Navbar from "@/components/navBar";
 
 export default async function Dashboardpage() {
   const session = await auth();
@@ -20,7 +20,7 @@ export default async function Dashboardpage() {
     <div className=" min-h-screen relative bg-gray-100">
       <Sidebar />
       <div className="flex-1 flex flex-col p-6">
-        <Navbar />
+        <Navbar session={session}/>
         <div className="flex-1 mt-6">
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 mb-6">
             <DocumentCount />

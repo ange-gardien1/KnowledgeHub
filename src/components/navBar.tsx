@@ -1,4 +1,4 @@
-// components/ClientNavbar.tsx
+// components/Navbar.tsx
 'use client';
 
 import { useState } from "react";
@@ -16,15 +16,12 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Button } from "./ui/button";
-import NotificationSheet, { useNotifications } from "./notificationSheet";
+import NotificationSheet from "./notificationSheet";
 import { trpc } from "@/app/_trpc/client";
 
-
-export const Navbar = () => {
+export default function Navbar({ session }: { session: any }) {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const { data, isLoading } = trpc.notification.getNotificationByStatus.useQuery();
-
-//   if (!session) return null;
 
   const handleBellClick = () => {
     setIsSheetOpen(true);
@@ -56,7 +53,7 @@ export const Navbar = () => {
               variant="outline"
             >
               <Avatar className="h-10 w-10">
-                {/* <AvatarImage src={session?.user?.image ?? undefined} /> */}
+                <AvatarImage src={session?.user?.image ?? undefined} />
               </Avatar>
               <IconCaretDownFilled
                 size={20}
@@ -68,8 +65,8 @@ export const Navbar = () => {
           <DropdownMenuContent className="w-56">
             <DropdownMenuSeparator />
             <DropdownMenuItem className="cursor-default hover:bg-none flex flex-col space-y-2">
-              {/* <p className="font-bold text-sm">{session?.user?.name}</p>
-              <p className="font-normal text-xs">{session?.user?.email}</p> */}
+              <p className="font-bold text-sm">{session?.user?.name}</p>
+              <p className="font-normal text-xs">{session?.user?.email}</p>
             </DropdownMenuItem>
             <DropdownMenuItem className="font-semibold hover:bg-blue-50 items-center flex justify-center text-gray-600 hover:text-gray-800">
               Sign Out
@@ -79,4 +76,4 @@ export const Navbar = () => {
       </div>
     </div>
   );
-};
+}

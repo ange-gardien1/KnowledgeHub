@@ -2,12 +2,10 @@
 import { useState } from "react";
 
 import Createdocument from "./newDocument";
-
 import Tiptap from "@/components/Tiptap";
 import GetProjects from "../projects/getProjects";
-import GetResources from "../resources/getResources";
-import { ResourcePopover } from "@/components/addResources";
 import GetAllResources from "@/components/getResources";
+import { ResourcePopover } from "@/components/addResources";
 
 function Documents() {
   const [activeTab, setActiveTab] = useState("documents");
@@ -51,13 +49,12 @@ function Documents() {
                 <Tiptap />
               </>
             )}
-            {activeTab === "resources" && 
-            <div>
-            <ResourcePopover/>
-            </div>}
-            <div>
-                <GetAllResources/>
-            </div>
+            {activeTab === "resources" && (
+              <>
+                <ResourcePopover />
+                <GetAllResources />
+              </>
+            )}
           </div>
         </div>
       </div>

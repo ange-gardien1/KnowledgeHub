@@ -18,6 +18,7 @@ export const getResourcesByType = protectedProcedure.query(
       .where(eq(resources.type, "link"));
 
     return resourcesByType.map(resource => ({
+      id: resource.id, 
       title: resource.title,
       url: resource.url,
       type: resource.type,

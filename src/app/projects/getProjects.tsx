@@ -18,6 +18,7 @@ import {
 import DocumentUpload from "@/components/newDocument/uploadDocument";
 import CreateDocuments from "@/components/newDocument/createDocument";
 import EditDocument from "@/components/editDocument";
+import { useComments } from "../hooks/useComments";
 
 type Project = {
   id: string;
@@ -44,6 +45,10 @@ const GetProjects = () => {
   );
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(
     null
+  );
+  
+  const { comments, isLoadingComments, errorComments } = useComments(
+    selectedDocument?.id || null
   );
   const [isCreatingDocument, setIsCreatingDocument] = useState(false);
   const [menuVisible, setMenuVisible] = useState<string | null>(null);
@@ -343,7 +348,25 @@ const GetProjects = () => {
                   )}
                 </div>
               )}
+
             </div>
+            {/* Comments Section */}
+      <div className="mt-6">
+        <h3 className="text-lg font-semibold">Comments</h3>
+        {isLoadingComments ? (
+          <p>Loading comments...</p>
+        ) : errorComments ? (
+          <p className="text-red-500">Error loading comments: {errorComments.message}</p>
+        ) : comments && comments.length > 0 ? (
+          comments.map((comment) => (
+            <div key={comment.id} className="mt-2 p-2 border border-gray-200 rounded">
+              <p>{comment.content}</p>
+            </div>
+          ))
+        ) : (
+          <p>No comments available for this document.</p>
+        )}
+      </div>
           </div>
         )}
       </div>

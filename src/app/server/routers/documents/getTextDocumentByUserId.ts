@@ -6,6 +6,7 @@ import { and, eq } from "drizzle-orm";
 export const getTextDocumentByUserId = protectedProcedure.query(
   async ({ ctx }) => {
     const userId = ctx.session?.user?.id;
+    // const roleId = ctx.session?.user?.roleId;
     if (!userId) {
       throw new Error("user Not Found");
     }

@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
 import { auth } from "../auth";
 import Sidebar from "@/components/sideBar";
-import { Navbar } from "@/components/navBar";
 import ResourcesPage from "./resources";
+import Navbar from "@/components/navBar";
 
 
 export default async function ResourcesPages() {
@@ -17,7 +17,7 @@ export default async function ResourcesPages() {
     <div className="flex h-screen bg-white">
       <Sidebar /> 
       <div className="flex-1 flex flex-col">
-        <Navbar />
+        <Navbar session={session}/>
         <main className="flex-1 p-6 overflow-auto">
        <ResourcesPage/>
         </main>

@@ -36,6 +36,13 @@
       "when": 1722440948509,
       "tag": "0004_luxuriant_golden_guardian",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1723957729469,
+      "tag": "0005_wealthy_goblin_queen",
+      "breakpoints": true
     }
   ]
 }

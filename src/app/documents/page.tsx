@@ -1,16 +1,19 @@
 
 import Sidebar from '@/components/sideBar'
 import React from 'react'
-import { Navbar } from '@/components/navBar'
+
 import Documents from './documentsPage'
+import Navbar from '@/components/navBar'
+import { auth } from '../auth';
 
 
 
-function documents() {
+async function documents() {
+  const session = await auth();
   return (
     <div className="w-screen flex bg-white ">
       <Sidebar />
-      <Navbar/>
+      <Navbar session={session}/>
       
       <div>
       <Documents/>
