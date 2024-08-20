@@ -1,10 +1,11 @@
-'use client'
+'use client';
 import React, { useState } from "react";
 import { trpc } from "../_trpc/client";
 import { IconPdf, IconTxt } from "@tabler/icons-react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import EditDocument from "@/components/editDocument";
+import { useToast } from "@/components/ui/use-toast";
 
 type Document = {
   id: string;
@@ -19,16 +20,8 @@ const GetDocuments = () => {
   const addResourceMutation = trpc.resources.addResourceByDocumentId.useMutation();
   const [isAddingResource, setIsAddingResource] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const deleteDocumentMutation = trpc.documents.deleteDocumentById.useMutation({
-    onSuccess: () => {
-      refetch(); // Refetch documents to update the list
-      setSelectedDocument(null); // Clear the selected document after deletion
-    },
-    onError: (error) => {
-      console.error("Failed to delete document:", error);
-      alert("Failed to delete document. Please try again.");
-    }
-  });
+  const deleteDocumentMutation = trpc.documents.deleteDocumentById.useMutation();
+  const { toast } = useToast(); 
 
   const handleDocumentClick = (document: Document) => {
     setSelectedDocument(document);
@@ -40,10 +33,16 @@ const GetDocuments = () => {
 
     try {
       await deleteDocumentMutation.mutateAsync({ id: selectedDocument.id });
-      alert("Document deleted successfully!");
+      refetch(); 
+      setSelectedDocument(null); 
+      toast({
+        description: "Document deleted successfully!",
+      });
     } catch (error) {
       console.error("Failed to delete document:", error);
-      alert("Failed to delete document. Please try again.");
+      toast({
+        description: "Failed to delete document. Please try again.",
+      });
     }
   };
 
@@ -61,11 +60,15 @@ const GetDocuments = () => {
     try {
       setIsAddingResource(true);
       await addResourceMutation.mutateAsync(resource);
-      alert("Document added to resources successfully!");
+      toast({
+        description: "Document added to resources successfully!",
+      });
       setSelectedDocument(null);
     } catch (error) {
       console.error("Failed to add document to resources:", error);
-      alert("Failed to add document to resources. Please try again.");
+      toast({
+        description: "Failed to add document to resources. Please try again.",
+      });
     } finally {
       setIsAddingResource(false);
     }

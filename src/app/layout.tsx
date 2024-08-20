@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import Provider from "./_trpc/provider";
 import Sidebar from "@/components/sideBar";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -39,6 +40,7 @@ export default function RootLayout({
             disableTransitionOnChange>
         <Provider>{children}</Provider>
         </ThemeProvider>
+        <Toaster />
       </body>
     </html>
   );

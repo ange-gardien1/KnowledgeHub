@@ -1,23 +1,21 @@
-// components/Navbar.tsx
+
 'use client';
 
-import { useState } from "react";
-import { IconCaretDownFilled, IconBellRinging } from "@tabler/icons-react";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { useState } from 'react';
+import { IconCaretDownFilled, IconBellRinging } from '@tabler/icons-react';
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuSeparator,
   DropdownMenuContent,
-} from "@/components/ui/dropdown-menu";
-import {
-  Sheet,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { Button } from "./ui/button";
-import NotificationSheet from "./notificationSheet";
-import { trpc } from "@/app/_trpc/client";
+} from '@/components/ui/dropdown-menu';
+import { Sheet, SheetTrigger } from '@/components/ui/sheet';
+import { Button } from './ui/button';
+import NotificationSheet from './notificationSheet';
+import { trpc } from '@/app/_trpc/client';
+import SignOutButton from './signOutButton';
 
 export default function Navbar({ session }: { session: any }) {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
@@ -55,11 +53,7 @@ export default function Navbar({ session }: { session: any }) {
               <Avatar className="h-10 w-10">
                 <AvatarImage src={session?.user?.image ?? undefined} />
               </Avatar>
-              <IconCaretDownFilled
-                size={20}
-                stroke={2}
-                strokeLinejoin="miter"
-              />
+              <IconCaretDownFilled size={20} stroke={2} strokeLinejoin="miter" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56">
@@ -69,7 +63,7 @@ export default function Navbar({ session }: { session: any }) {
               <p className="font-normal text-xs">{session?.user?.email}</p>
             </DropdownMenuItem>
             <DropdownMenuItem className="font-semibold hover:bg-blue-50 items-center flex justify-center text-gray-600 hover:text-gray-800">
-              Sign Out
+              <SignOutButton />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

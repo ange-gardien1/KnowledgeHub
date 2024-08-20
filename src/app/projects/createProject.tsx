@@ -1,8 +1,9 @@
-'use client'
+'use client';
 import { trpc } from "@/app/_trpc/client";
 import React, { useState } from "react";
 import { IconPlus } from "@tabler/icons-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { useToast } from "@/components/ui/use-toast";
 
 const ProjectCreate: React.FC = () => {
   const [name, setName] = useState("");
@@ -10,6 +11,7 @@ const ProjectCreate: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
 
   const createProject = trpc.projects.createNewProject.useMutation();
+  const { toast } = useToast(); 
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -25,7 +27,9 @@ const ProjectCreate: React.FC = () => {
       await createProject.mutateAsync({ name });
       setName("");
       setError(null);
-      alert("Project created successfully!");
+      toast({
+        description: "Project created successfully!",
+      });
     } catch (err: any) {
       setError(err.message || "Failed to create project");
     } finally {
