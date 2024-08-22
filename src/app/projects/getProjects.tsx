@@ -1,4 +1,5 @@
-"use client";
+'use client'
+
 import React, { useState } from "react";
 import { trpc } from "../_trpc/client";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -19,6 +20,8 @@ import DocumentUpload from "@/components/newDocument/uploadDocument";
 import CreateDocuments from "@/components/newDocument/createDocument";
 import EditDocument from "@/components/editDocument";
 import { useComments } from "../hooks/useComments";
+import { useDeleteProject } from "../hooks/useDeleteProject"; 
+import { IconHttpDelete } from '@tabler/icons-react';
 
 type Project = {
   id: string;
@@ -40,20 +43,15 @@ const GetProjects = () => {
     isLoading: isLoadingProjects,
     error: errorProjects,
   } = trpc.projects.getUserProjects.useQuery();
-  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(
-    null
-  );
-  const [selectedDocument, setSelectedDocument] = useState<Document | null>(
-    null
-  );
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
+  const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
   
   const { comments, isLoadingComments, errorComments } = useComments(
     selectedDocument?.id || null
   );
   const [isCreatingDocument, setIsCreatingDocument] = useState(false);
   const [menuVisible, setMenuVisible] = useState<string | null>(null);
-  const addResourceMutation =
-    trpc.resources.addResourceByDocumentId.useMutation();
+  const addResourceMutation = trpc.resources.addResourceByDocumentId.useMutation();
   const deleteDocumentMutation = trpc.documents.deleteDocumentById.useMutation({
     onSuccess: () => {
       refetch();
@@ -64,6 +62,8 @@ const GetProjects = () => {
       alert("Failed to delete document. Please try again.");
     },
   });
+
+  const { mutateAsync: deleteProject } = useDeleteProject(); 
 
   const {
     data: documents,
@@ -84,7 +84,7 @@ const GetProjects = () => {
     setSelectedDocument(document);
   };
 
-  const handleDelete = async () => {
+  const handleDeleteDocument = async () => {
     if (!selectedDocument) return;
 
     try {
@@ -93,6 +93,19 @@ const GetProjects = () => {
     } catch (error) {
       console.error("Failed to delete document:", error);
       alert("Failed to delete document. Please try again.");
+    }
+  };
+
+  const handleDeleteProject = async () => {
+    if (!selectedProjectId) return;
+
+    try {
+      await deleteProject({ id: selectedProjectId });
+      setSelectedProjectId(null); 
+      alert("Project deleted successfully!");
+    } catch (error) {
+      console.error("Failed to delete project:", error);
+      alert("Failed to delete project. Please try again.");
     }
   };
 
@@ -155,21 +168,24 @@ const GetProjects = () => {
             >
               <Card className="w-full border border-gray-200 bg-white">
                 <CardContent>
-                  <IconFolder
-                    stroke={2}
-                    size={60}
-                    className="text-primary-500"
-                  />
+                  <IconFolder stroke={2} size={60} className="text-primary-500" />
                   <h3 className="text-lg font-semibold mt-2">{project.name}</h3>
                 </CardContent>
                 <CardFooter className="text-gray-600">
                   <p>{project.description}</p>
                   <p>
-                    Created at:{" "}
-                    {new Date(project.createdAt).toLocaleDateString()}
+                    Created at: {new Date(project.createdAt).toLocaleDateString()}
                   </p>
                 </CardFooter>
               </Card>
+              <IconHttpDelete stroke={2}  onClick={() => handleDeleteProject()}
+                className="mt-2 bg-red-500 hover:bg-red-600 text-white w-full"/>
+              {/* <Button
+                onClick={() => handleDeleteProject()}
+                className="mt-2 bg-red-500 hover:bg-red-600 text-white w-full"
+              >
+                Delete
+              </Button> */}
             </div>
           ))}
         </div>
@@ -236,18 +252,10 @@ const GetProjects = () => {
                               target="_blank"
                               rel="noopener noreferrer"
                             >
-                              <IconPdf
-                                stroke={2}
-                                size={60}
-                                className="text-red-500"
-                              />
+                              <IconPdf stroke={2} size={60} className="text-red-500" />
                             </a>
                           ) : (
-                            <IconTxt
-                              stroke={2}
-                              size={60}
-                              className="text-blue-500"
-                            />
+                            <IconTxt stroke={2} size={60} className="text-blue-500" />
                           )}
                           <Button
                             onClick={(e) => {
@@ -277,7 +285,7 @@ const GetProjects = () => {
                               )}
                               <Button
                                 onClick={() => {
-                                  handleDelete();
+                                  handleDeleteDocument();
                                   setMenuVisible(null);
                                 }}
                                 className="w-full text-left py-2 px-2 hover:bg-gray-100"
@@ -348,25 +356,25 @@ const GetProjects = () => {
                   )}
                 </div>
               )}
+            </div>
 
-            </div>
             {/* Comments Section */}
-      <div className="mt-6">
-        <h3 className="text-lg font-semibold">Comments</h3>
-        {isLoadingComments ? (
-          <p>Loading comments...</p>
-        ) : errorComments ? (
-          <p className="text-red-500">Error loading comments: {errorComments.message}</p>
-        ) : comments && comments.length > 0 ? (
-          comments.map((comment) => (
-            <div key={comment.id} className="mt-2 p-2 border border-gray-200 rounded">
-              <p>{comment.content}</p>
+            <div className="mt-6">
+              <h3 className="text-lg font-semibold">Comments</h3>
+              {isLoadingComments ? (
+                <p>Loading comments...</p>
+              ) : errorComments ? (
+                <p className="text-red-500">Error loading comments: {errorComments.message}</p>
+              ) : comments && comments.length > 0 ? (
+                comments.map((comment) => (
+                  <div key={comment.id} className="mt-2 p-2 border border-gray-200 rounded">
+                    <p>{comment.content}</p>
+                  </div>
+                ))
+              ) : (
+                <p>No comments available for this document.</p>
+              )}
             </div>
-          ))
-        ) : (
-          <p>No comments available for this document.</p>
-        )}
-      </div>
           </div>
         )}
       </div>
