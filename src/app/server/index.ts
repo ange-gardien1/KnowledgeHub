@@ -10,7 +10,9 @@ import { getNotificationByStatus } from "./routers/notifications/getNotification
 import { projectsRouter } from "./routers/projects";
 // import { markNotificationAsRead } from "./routers/notifications/updateNotification";
 import { resources } from "./routers/resources";
+import { roles } from "./routers/roles";
 import { router } from "./trpc";
+
 export const appRouter = router({
   users: usersRouter,
   documents: documentsRouter,
@@ -20,7 +22,8 @@ export const appRouter = router({
   getNotificationByUserId: getNotificationByUserId,
   notification: notificationRouter,
   request:RequestRouter,
-  projects:projectsRouter
+  projects:projectsRouter,
+  Roles:roles
 
 });
 export type AppRouter = typeof appRouter;

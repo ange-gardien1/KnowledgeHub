@@ -18,15 +18,19 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
 export default function Navbar({ session }: { session: any }) {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-  const { data, isLoading } =
-    trpc.notification.getNotificationByStatus.useQuery();
+
+  const { data, isLoading } = trpc.notification.getNotificationByStatus.useQuery();
+
+
+  const { data: roleName, isLoading: isRoleLoading } = trpc.Roles.getMyRole.useQuery(session?.user?.roleId, {
+    enabled: !!session?.user?.roleId, 
+  });
 
   const handleBellClick = () => {
     setIsSheetOpen(true);
   };
 
-  const unreadNotificationCount =
-    data?.filter((notification) => !notification.read).length || 0;
+  const unreadNotificationCount = data?.filter((notification) => !notification.read).length || 0;
 
   return (
     <div className="fixed flex items-center top-0 border-b h-14 z-10 bg-white w-full">
@@ -66,6 +70,9 @@ export default function Navbar({ session }: { session: any }) {
             <DropdownMenuItem className="cursor-default hover:bg-none flex flex-col space-y-2">
               <p className="font-bold text-sm">{session?.user?.name}</p>
               <p className="font-normal text-xs">{session?.user?.email}</p>
+              <p className="font-normal text-xs">
+                {isRoleLoading ? "Loading..." : roleName || "Guest"}
+              </p>
             </DropdownMenuItem>
             <DropdownMenuItem className="font-semibold hover:bg-blue-50 items-center flex justify-center text-gray-600 hover:text-gray-800">
               <SignOutButton />

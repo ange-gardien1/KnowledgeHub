@@ -37,15 +37,16 @@ type Document = {
   content?: string | null;
 };
 
-const GetProjects = () => {
+const GetProjects = ({ session }: { session: any }) => {
   const {
     data: projects,
     isLoading: isLoadingProjects,
     error: errorProjects,
   } = trpc.projects.getUserProjects.useQuery();
+
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
-  
+
   const { comments, isLoadingComments, errorComments } = useComments(
     selectedDocument?.id || null
   );
@@ -74,6 +75,11 @@ const GetProjects = () => {
     { projectId: selectedProjectId! },
     { enabled: !!selectedProjectId }
   );
+
+  
+  const { data: roleName, isLoading: isRoleLoading } = trpc.Roles.getMyRole.useQuery(session?.user?.roleId, {
+    enabled: !!session?.user?.roleId, 
+  });
 
   const handleProjectClick = (projectId: string) => {
     setSelectedProjectId(projectId);
@@ -292,15 +298,17 @@ const GetProjects = () => {
                               >
                                 Delete Document
                               </Button>
-                              <Button
-                                onClick={() => {
-                                  handleAddToResources();
-                                  setMenuVisible(null);
-                                }}
-                                className="w-full text-left py-2 px-2 hover:bg-gray-100"
-                              >
-                                Add To Resource
-                              </Button>
+                              {roleName === "Admin" && (
+                                <Button
+                                  onClick={() => {
+                                    handleAddToResources();
+                                    setMenuVisible(null);
+                                  }}
+                                  className="w-full text-left py-2 px-2 hover:bg-gray-100"
+                                >
+                                  Add To Resource
+                                </Button>
+                              )}
                             </div>
                           )}
                         </CardContent>
