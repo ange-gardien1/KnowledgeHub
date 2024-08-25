@@ -19,7 +19,7 @@ export default async function projects() {
     return (
         <div>
            <div>
-            <GetProjects/>
+            <GetProjects  session={session}/>
         </div>
         <div>
            <ProjectCreate/>

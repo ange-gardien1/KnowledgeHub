@@ -16,7 +16,7 @@ async function documents() {
       <Navbar session={session}/>
       
       <div>
-      <Documents/>
+    <Documents />;
     </div>
     
     </div>

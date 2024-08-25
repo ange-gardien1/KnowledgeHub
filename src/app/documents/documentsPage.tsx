@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 
 import Createdocument from "./newDocument";
 import Tiptap from "@/components/Tiptap";
@@ -8,11 +9,24 @@ import GetAllResources from "@/components/getResources";
 import { ResourcePopover } from "@/components/addResources";
 
 function Documents() {
+  const { data: session, status } = useSession();
+
   const [activeTab, setActiveTab] = useState("documents");
 
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
   };
+
+  if (status === 'loading') {
+    return <div>Loading...</div>;
+  }
+
+  if (status === 'unauthenticated') {
+    return <div>You need to be authenticated to view this content.</div>; 
+  }
+
+
+  const isAdmin = session?.user?.roleId === '8f6d6f9e-36d6-4db1-8f6a-c1a0dfcc8a72';
 
   return (
     <div className="w-screen flex bg-white">
@@ -45,13 +59,13 @@ function Documents() {
             {activeTab === "documents" && (
               <>
                 <Createdocument />
-                <GetProjects />
+                <GetProjects session={session} />
                 <Tiptap />
               </>
             )}
             {activeTab === "resources" && (
               <>
-                <ResourcePopover />
+                {isAdmin && <ResourcePopover />}
                 <GetAllResources />
               </>
             )}

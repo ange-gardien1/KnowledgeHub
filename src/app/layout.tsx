@@ -7,6 +7,7 @@ import Provider from "./_trpc/provider";
 import Sidebar from "@/components/sideBar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
+import { SessionProvider } from "next-auth/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -38,7 +39,9 @@ export default function RootLayout({
             defaultTheme="light"
             enableSystem
             disableTransitionOnChange>
+              <SessionProvider>
         <Provider>{children}</Provider>
+        </SessionProvider>
         </ThemeProvider>
         <Toaster />
       </body>
