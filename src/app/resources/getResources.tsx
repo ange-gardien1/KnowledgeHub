@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
 import Link from "next/link";
+import { useComments } from "../hooks/useComments";  // Import the custom hook
 
 type Resource = {
   resourceId: string;
@@ -27,7 +28,12 @@ const GetResourcesDoc = () => {
     null
   );
   const createEditRequestMutation = trpc.editRequest.useMutation();
+  const addCommentMutation = trpc.comments.addNewComment.useMutation(); // Corrected use of useMutation
   const [isRequestingEdit, setIsRequestingEdit] = useState(false);
+  const [newComment, setNewComment] = useState(""); // State for the new comment input
+
+  // Fetch comments when a resource is selected
+  const { comments, isLoadingComments, errorComments, refetch } = useComments(selectedResource?.documentId || null);
 
   const handleResourceClick = (resource: Resource) => {
     setSelectedResource(resource);
@@ -52,6 +58,22 @@ const GetResourcesDoc = () => {
     }
   };
 
+  const handleAddComment = async () => {
+    if (!selectedResource || !newComment.trim()) return;
+
+    try {
+      await addCommentMutation.mutateAsync({
+        resourceId: selectedResource.resourceId,
+        content: newComment
+      });
+      setNewComment("");  // Clear input after submission
+      refetch();  // Refetch comments to update the list
+    } catch (error) {
+      console.error("Failed to add comment:", error);
+      alert("Failed to add comment. Please try again.");
+    }
+  };
+
   if (isLoading) {
     return <p>Loading resources...</p>;
   }
@@ -67,7 +89,7 @@ const GetResourcesDoc = () => {
           <div className="flex flex-wrap gap-2.5">
             {data?.map((resource: Resource) => (
               <div
-                key={resource.resourceId}  
+                key={resource.resourceId}
                 className="flex-1 min-w-[18%] mb-2.5 cursor-pointer"
                 onClick={() => handleResourceClick(resource)}
               >
@@ -122,6 +144,48 @@ const GetResourcesDoc = () => {
                   </PopoverTrigger>
                 </Popover>
               )}
+
+              {/* Comments Section */}
+              <div className="mt-4">
+                <h3 className="text-lg font-semibold">Comments</h3>
+                {isLoadingComments ? (
+                  <p>Loading comments...</p>
+                ) : errorComments ? (
+                  <p>Error fetching comments: {errorComments.message}</p>
+                ) : (
+                  <div className="mt-2">
+                    {comments?.length ? (
+                      comments.map((comment, index) => (
+                        <div key={index} className="border-b py-2">
+                          <p>{comment.content}</p>
+                          <p className="text-xs text-gray-500">By {comment.userId}</p>
+                        </div>
+                      ))
+                    ) : (
+                      <p>No comments yet.</p>
+                    )}
+                  </div>
+                )}
+
+                {/* Add Comment Input */}
+                <div className="mt-4">
+                  <textarea
+                    className="w-full border rounded p-2"
+                    rows={3}
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                    placeholder="Write a comment..."
+                  />
+                  <Button
+                    className="mt-2"
+                    onClick={handleAddComment}
+                    // disabled={addCommentMutation.isLoading || !newComment.trim()}
+                  >
+                    Add Comment
+                    {/* {addCommentMutation.isLoading ? "Adding Comment..." : "Add Comment"} */}
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
         )}
