@@ -7,6 +7,7 @@ import { sql } from "drizzle-orm";
 export const addComment = protectedProcedure
   .input(z.object({
     resourceId: z.string().uuid(),
+    documentId: z.string().uuid().nullable(), 
     content: z.string().min(1),
   }))
   .mutation(async ({ ctx, input }) => {
@@ -19,6 +20,7 @@ export const addComment = protectedProcedure
     await db.insert(comments).values({
       id: sql`gen_random_uuid()`,
       resourceId: input.resourceId,
+      documentId: input.documentId,  
       userId,
       content: input.content,
       createdAt: sql`now()`,

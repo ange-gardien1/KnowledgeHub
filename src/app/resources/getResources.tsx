@@ -6,8 +6,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { format } from "date-fns";
-import Link from "next/link";
-import { useComments } from "../hooks/useComments";  // Import the custom hook
+import { useComments } from "../hooks/useComments";
 
 type Resource = {
   resourceId: string;
@@ -28,12 +27,17 @@ const GetResourcesDoc = () => {
     null
   );
   const createEditRequestMutation = trpc.editRequest.useMutation();
-  const addCommentMutation = trpc.comments.addNewComment.useMutation(); // Corrected use of useMutation
+
+  const { mutateAsync: addComment, isPending } =
+    trpc.comments.addNewComment.useMutation();
+
   const [isRequestingEdit, setIsRequestingEdit] = useState(false);
-  const [newComment, setNewComment] = useState(""); // State for the new comment input
+  const [newComment, setNewComment] = useState("");
 
   // Fetch comments when a resource is selected
-  const { comments, isLoadingComments, errorComments, refetch } = useComments(selectedResource?.documentId || null);
+  const { comments, isLoadingComments, errorComments, refetch } = useComments(
+    selectedResource?.documentId || null
+  );
 
   const handleResourceClick = (resource: Resource) => {
     setSelectedResource(resource);
@@ -46,7 +50,7 @@ const GetResourcesDoc = () => {
       setIsRequestingEdit(true);
       await createEditRequestMutation.mutateAsync({
         documentId: selectedResource.documentId || "",
-        userId: selectedResource.userName || ""
+        userId: selectedResource.userName || "",
       });
       alert("Edit request submitted successfully!");
 
@@ -62,12 +66,13 @@ const GetResourcesDoc = () => {
     if (!selectedResource || !newComment.trim()) return;
 
     try {
-      await addCommentMutation.mutateAsync({
+      await addComment({
         resourceId: selectedResource.resourceId,
-        content: newComment
+        documentId: selectedResource.documentId,
+        content: newComment,
       });
-      setNewComment("");  // Clear input after submission
-      refetch();  // Refetch comments to update the list
+      setNewComment("");
+      refetch();
     } catch (error) {
       console.error("Failed to add comment:", error);
       alert("Failed to add comment. Please try again.");
@@ -117,7 +122,9 @@ const GetResourcesDoc = () => {
         {selectedResource && (
           <div className="flex-1">
             <div className="mt-5">
-              <h2 className="text-xl font-semibold">{selectedResource.title}</h2>
+              <h2 className="text-xl font-semibold">
+                {selectedResource.title}
+              </h2>
               {selectedResource.type === "pdf" ? (
                 <iframe
                   src={selectedResource.pdfUrl || "#"}
@@ -133,7 +140,8 @@ const GetResourcesDoc = () => {
                 />
               )}
               <p className="text-sm text-gray-500 mt-2">
-                Created At: {format(new Date(selectedResource.createdAt), "PPpp")}
+                Created At:{" "}
+                {format(new Date(selectedResource.createdAt), "PPpp")}
               </p>
               {selectedResource.type === "text" && (
                 <Popover>
@@ -158,7 +166,9 @@ const GetResourcesDoc = () => {
                       comments.map((comment, index) => (
                         <div key={index} className="border-b py-2">
                           <p>{comment.content}</p>
-                          <p className="text-xs text-gray-500">By {comment.userId}</p>
+                          <p className="text-xs text-gray-500">
+                            By {comment.userId}
+                          </p>
                         </div>
                       ))
                     ) : (
@@ -179,10 +189,9 @@ const GetResourcesDoc = () => {
                   <Button
                     className="mt-2"
                     onClick={handleAddComment}
-                    // disabled={addCommentMutation.isLoading || !newComment.trim()}
+                    disabled={isPending || !newComment.trim()} // Use destructured isLoading state
                   >
-                    Add Comment
-                    {/* {addCommentMutation.isLoading ? "Adding Comment..." : "Add Comment"} */}
+                    {isPending ? "Adding Comment..." : "Add Comment"}
                   </Button>
                 </div>
               </div>
