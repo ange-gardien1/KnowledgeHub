@@ -374,8 +374,8 @@ const GetProjects = ({ session }: { session: any }) => {
               ) : errorComments ? (
                 <p className="text-red-500">Error loading comments: {errorComments.message}</p>
               ) : comments && comments.length > 0 ? (
-                comments.map((comment) => (
-                  <div key={comment.id} className="mt-2 p-2 border border-gray-200 rounded">
+                comments.map((comment, index) => (
+                  <div key={index} className="mt-2 p-2 border border-gray-200 rounded">
                     <p>{comment.content}</p>
                   </div>
                 ))
