@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import React, { useState } from "react";
 import { trpc } from "../_trpc/client";
@@ -20,8 +20,16 @@ import DocumentUpload from "@/components/newDocument/uploadDocument";
 import CreateDocuments from "@/components/newDocument/createDocument";
 import EditDocument from "@/components/editDocument";
 import { useComments } from "../hooks/useComments";
-import { useDeleteProject } from "../hooks/useDeleteProject"; 
-import { IconHttpDelete } from '@tabler/icons-react';
+import { useDeleteProject } from "../hooks/useDeleteProject";
+import { IconHttpDelete } from "@tabler/icons-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useToast } from "@/components/ui/use-toast";
 
 type Project = {
   id: string;
@@ -38,33 +46,86 @@ type Document = {
 };
 
 const GetProjects = ({ session }: { session: any }) => {
+  const { toast } = useToast(); 
+
   const {
     data: projects,
     isLoading: isLoadingProjects,
     error: errorProjects,
   } = trpc.projects.getUserProjects.useQuery();
 
-  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
-  const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(
+    null
+  );
+  const [selectedDocument, setSelectedDocument] = useState<Document | null>(
+    null
+  );
 
   const { comments, isLoadingComments, errorComments } = useComments(
     selectedDocument?.id || null
   );
   const [isCreatingDocument, setIsCreatingDocument] = useState(false);
   const [menuVisible, setMenuVisible] = useState<string | null>(null);
-  const addResourceMutation = trpc.resources.addResourceByDocumentId.useMutation();
-  const deleteDocumentMutation = trpc.documents.deleteDocumentById.useMutation({
+
+
+  const addResourceMutation =
+    trpc.resources.addResourceByDocumentId.useMutation();
+
+    const deleteDocumentMutation = trpc.documents.deleteDocumentById.useMutation({
+      onSuccess: () => {
+        refetch();
+        toast({
+          title: "Document deleted successfully!",
+          description: "The document has been removed.",
+        });
+      },
+      onError: (error) => {
+        toast({
+          title: "Failed to delete document",
+          description: `Error: ${error.message}. Please try again.`,
+          variant: "destructive",
+        });
+      },
+    });
+    
+  const shareProjectMutation = trpc.Projectshare.addShares.useMutation({
     onSuccess: () => {
-      refetch();
-      setSelectedDocument(null);
+      toast({
+        title: "Project shared successfully!",
+        description: "The project has been shared with the selected user.",
+      });
     },
     onError: (error) => {
-      console.error("Failed to delete document:", error);
-      alert("Failed to delete document. Please try again.");
+      toast({
+        title: "Failed to share project",
+        description: `Error: ${error.message}. Please try again.`,
+        variant: "destructive",
+      });
     },
   });
 
-  const { mutateAsync: deleteProject } = useDeleteProject(); 
+  const handleShareProject = async (
+    projectId: string,
+    sharedWithUserId: string
+  ) => {
+    try {
+      await shareProjectMutation.mutateAsync({
+        projectId,
+        sharedWithUserId,
+        permission: "view", // Or let the user choose the permission
+      });
+    } catch (error) {
+      console.error("Error sharing project:", error);
+    }
+  };
+
+  const {
+    data: users,
+    isLoading: isLoadingUsers,
+    error: errorUsers,
+  } = trpc.users.getAll.useQuery();
+
+  const { mutateAsync: deleteProject } = useDeleteProject();
 
   const {
     data: documents,
@@ -76,10 +137,10 @@ const GetProjects = ({ session }: { session: any }) => {
     { enabled: !!selectedProjectId }
   );
 
-  
-  const { data: roleName, isLoading: isRoleLoading } = trpc.Roles.getMyRole.useQuery(session?.user?.roleId, {
-    enabled: !!session?.user?.roleId, 
-  });
+  const { data: roleName, isLoading: isRoleLoading } =
+    trpc.Roles.getMyRole.useQuery(session?.user?.roleId, {
+      enabled: !!session?.user?.roleId,
+    });
 
   const handleProjectClick = (projectId: string) => {
     setSelectedProjectId(projectId);
@@ -95,10 +156,10 @@ const GetProjects = ({ session }: { session: any }) => {
 
     try {
       await deleteDocumentMutation.mutateAsync({ id: selectedDocument.id });
-      alert("Document deleted successfully!");
+    
     } catch (error) {
       console.error("Failed to delete document:", error);
-      alert("Failed to delete document. Please try again.");
+    
     }
   };
 
@@ -107,7 +168,7 @@ const GetProjects = ({ session }: { session: any }) => {
 
     try {
       await deleteProject({ id: selectedProjectId });
-      setSelectedProjectId(null); 
+      setSelectedProjectId(null);
       alert("Project deleted successfully!");
     } catch (error) {
       console.error("Failed to delete project:", error);
@@ -135,6 +196,7 @@ const GetProjects = ({ session }: { session: any }) => {
       alert("Failed to add document to resources. Please try again.");
     }
   };
+  const [sharedWithUserId, setSharedWithUserId] = useState<string>("");
 
   const toggleMenu = (documentId: string) => {
     setMenuVisible(menuVisible === documentId ? null : documentId);
@@ -174,24 +236,68 @@ const GetProjects = ({ session }: { session: any }) => {
             >
               <Card className="w-full border border-gray-200 bg-white">
                 <CardContent>
-                  <IconFolder stroke={2} size={60} className="text-primary-500" />
+                  <IconFolder
+                    stroke={2}
+                    size={60}
+                    className="text-primary-500"
+                  />
                   <h3 className="text-lg font-semibold mt-2">{project.name}</h3>
                 </CardContent>
                 <CardFooter className="text-gray-600">
                   <p>{project.description}</p>
                   <p>
-                    Created at: {new Date(project.createdAt).toLocaleDateString()}
+                    Created at:{" "}
+                    {new Date(project.createdAt).toLocaleDateString()}
                   </p>
                 </CardFooter>
               </Card>
-              <IconHttpDelete stroke={2}  onClick={() => handleDeleteProject()}
-                className="mt-2 bg-red-500 hover:bg-red-600 text-white w-full"/>
-              {/* <Button
+              <IconHttpDelete
+                stroke={2}
                 onClick={() => handleDeleteProject()}
                 className="mt-2 bg-red-500 hover:bg-red-600 text-white w-full"
-              >
-                Delete
-              </Button> */}
+              />
+
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button className="mt-2 bg-blue-500 hover:bg-blue-600 text-white w-full">
+                    Share
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="p-2 bg-white rounded-lg shadow-lg w-64">
+                  {isLoadingUsers ? (
+                    <div>Loading users...</div>
+                  ) : errorUsers ? (
+                    <div>Error loading users: {errorUsers.message}</div>
+                  ) : (
+                    <div>
+                      <Select
+                        onValueChange={(userId) => setSharedWithUserId(userId)}
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select a user to share" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {users?.map((user) => (
+                            <SelectItem key={user.id} value={user.id}>
+                              {user.username}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+
+                      <Button
+                        onClick={() =>
+                          handleShareProject(project.id, sharedWithUserId)
+                        }
+                        className="mt-2 bg-green-500 hover:bg-green-600 text-white w-full"
+                        disabled={!sharedWithUserId} // Disable the button if no user is selected
+                      >
+                        Share Project
+                      </Button>
+                    </div>
+                  )}
+                </PopoverContent>
+              </Popover>
             </div>
           ))}
         </div>
@@ -213,7 +319,7 @@ const GetProjects = ({ session }: { session: any }) => {
                     onClick={() => setIsCreatingDocument(true)}
                     className="bg-primary-500 hover:bg-primary-600 text-black flex items-center p-2 rounded-lg shadow-md"
                   >
-                   <IconPlus size={16} stroke={2} />
+                    <IconPlus size={16} stroke={2} />
                     <p>Create or Upload Document</p>
                   </Button>
                 </PopoverTrigger>
@@ -258,10 +364,18 @@ const GetProjects = ({ session }: { session: any }) => {
                               target="_blank"
                               rel="noopener noreferrer"
                             >
-                              <IconPdf stroke={2} size={60} className="text-red-500" />
+                              <IconPdf
+                                stroke={2}
+                                size={60}
+                                className="text-red-500"
+                              />
                             </a>
                           ) : (
-                            <IconTxt stroke={2} size={60} className="text-blue-500" />
+                            <IconTxt
+                              stroke={2}
+                              size={60}
+                              className="text-blue-500"
+                            />
                           )}
                           <Button
                             onClick={(e) => {
@@ -372,10 +486,15 @@ const GetProjects = ({ session }: { session: any }) => {
               {isLoadingComments ? (
                 <p>Loading comments...</p>
               ) : errorComments ? (
-                <p className="text-red-500">Error loading comments: {errorComments.message}</p>
+                <p className="text-red-500">
+                  Error loading comments: {errorComments.message}
+                </p>
               ) : comments && comments.length > 0 ? (
                 comments.map((comment, index) => (
-                  <div key={index} className="mt-2 p-2 border border-gray-200 rounded">
+                  <div
+                    key={index}
+                    className="mt-2 p-2 border border-gray-200 rounded"
+                  >
                     <p>{comment.content}</p>
                   </div>
                 ))

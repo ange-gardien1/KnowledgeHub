@@ -43,6 +43,20 @@
       "when": 1723957729469,
       "tag": "0005_wealthy_goblin_queen",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1725565889638,
+      "tag": "0006_slimy_black_panther",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1725566147626,
+      "tag": "0007_wandering_spot",
+      "breakpoints": true
     }
   ]
 }

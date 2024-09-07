@@ -11,6 +11,9 @@ import { projectsRouter } from "./routers/projects";
 // import { markNotificationAsRead } from "./routers/notifications/updateNotification";
 import { resources } from "./routers/resources";
 import { roles } from "./routers/roles";
+import { shareprojectsRouter } from "./routers/shareProject";
+
+import { shareProject } from "./routers/shareProject/shareProject";
 import { router } from "./trpc";
 
 export const appRouter = router({
@@ -23,7 +26,8 @@ export const appRouter = router({
   notification: notificationRouter,
   request:RequestRouter,
   projects:projectsRouter,
-  Roles:roles
+  Roles:roles,
+  Projectshare:shareprojectsRouter
 
 });
 export type AppRouter = typeof appRouter;

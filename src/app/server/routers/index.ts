@@ -1,7 +1,8 @@
 import { router } from "../trpc";
-import { getAllUsers } from "./users";
+import { getUsers } from "./users";
+
 
 export const usersRouter = router({
-    getAll: getAllUsers
+    getAll: getUsers
     
 })

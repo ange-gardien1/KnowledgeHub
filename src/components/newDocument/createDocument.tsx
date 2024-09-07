@@ -13,7 +13,7 @@ import TextAlign from "@tiptap/extension-text-align";
 import MenuBar from "../menuBar";
 
 interface CreateDocumentsProps {
-  projectId: string; // Add projectId prop
+  projectId: string;
 }
 
 const CreateDocuments: React.FC<CreateDocumentsProps> = ({ projectId }) => {
@@ -54,7 +54,7 @@ const CreateDocuments: React.FC<CreateDocumentsProps> = ({ projectId }) => {
         title,
         type: "text",
         content,
-        projectId, // Pass projectId to the mutation
+        projectId,
       });
       setTitle("");
       editor?.commands.setContent("");
@@ -77,8 +77,10 @@ const CreateDocuments: React.FC<CreateDocumentsProps> = ({ projectId }) => {
           </button>
         </PopoverTrigger>
 
-        <PopoverContent className="w-[60vw] h-[80vh] p-4 bg-white rounded shadow-lg overflow-auto">
+        <PopoverContent className="w-[60vw] h-[80vh] p-4 bg-white rounded shadow-lg overflow-auto mt-20"> 
+          {/* mt-20 adds a margin-top to push it below the navbar */}
           <div className="flex flex-col pb-5 h-full">
+            {/* Sticky header for the popover content */}
             <div className="sticky top-0 z-20 flex items-center bg-white py-3 text-xs dark:bg-hc-darkgray-50">
               <h2 className="text-sm font-bold text-hc-gray-800 dark:text-gray-200 xl:text-base">
                 Create New Document
@@ -107,6 +109,8 @@ const CreateDocuments: React.FC<CreateDocumentsProps> = ({ projectId }) => {
                 </button>
               </div>
             </div>
+
+            {/* Content Section */}
             <div className="mt-10 flex-grow">
               <div className="mb-4">
                 <label
@@ -123,6 +127,7 @@ const CreateDocuments: React.FC<CreateDocumentsProps> = ({ projectId }) => {
                   className="mt-1 block w-full rounded-md border-yellow-300 shadow-sm focus:border-primary-500 focus:ring focus:ring-primary-500 focus:ring-opacity-50 dark:bg-hc-darkgray-100 dark:border-hc-darkgray-200 dark:text-gray-300"
                 />
               </div>
+
               <div className="mb-4 flex-grow">
                 <label
                   htmlFor="content"

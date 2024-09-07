@@ -167,14 +167,15 @@ export const notifications = pgTable('notifications', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
-export const shares = pgTable('shares', {
+export const projectShares = pgTable('project_shares', {
   id: uuid('id').primaryKey(),
-  documentId: uuid('document_id').references(() => documents.id),
-  sharedWithUserId: uuid('shared_with_user_id').references(() => users.id),
+  projectId: uuid('project_id').references(() => projects.id).notNull(),
+  sharedByUserId: uuid('shared_by_user_id').references(() => users.id).notNull(),
+  sharedWithUserId: uuid('shared_with_user_id').references(() => users.id).notNull(),
   permission: varchar('permission', { length: 6 }).notNull().default(PermissionType.VIEW),
   createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).default(sql`now()`).notNull(),
 });
+
 
 export const comments = pgTable('comments', {
   id: uuid('id').primaryKey(),
