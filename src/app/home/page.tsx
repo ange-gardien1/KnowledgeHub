@@ -1,4 +1,4 @@
-// pages/index.tsx
+// src/app/home/page.tsx
 import React from 'react';
 import Image from 'next/image';
 
@@ -45,7 +45,7 @@ const Index = () => {
         </section>
 
         <section className="flex flex-col items-center mb-16">
-          <h2 className="text-3xl font-bold mb-8">Features You'll Love</h2>
+          <h2 className="text-3xl font-bold mb-8">Features You&apos;ll Love</h2>
           <div className="flex flex-wrap justify-center gap-8">
             <div className="bg-white shadow-lg rounded-lg p-6 max-w-xs">
               <h3 className="text-xl font-semibold mb-4">Seamless Integration</h3>
