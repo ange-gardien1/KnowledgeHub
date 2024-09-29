@@ -59,7 +59,7 @@ const GetProjects = ({ session }: { session: any }) => {
   );
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(
     null
-  );
+  );  
 
   const { comments, isLoadingComments, errorComments } = useComments(
     selectedDocument?.id || null
@@ -112,7 +112,7 @@ const GetProjects = ({ session }: { session: any }) => {
       await shareProjectMutation.mutateAsync({
         projectId,
         sharedWithUserId,
-        permission: "view", // Or let the user choose the permission
+        permission: "view", 
       });
     } catch (error) {
       console.error("Error sharing project:", error);
@@ -290,7 +290,7 @@ const GetProjects = ({ session }: { session: any }) => {
                           handleShareProject(project.id, sharedWithUserId)
                         }
                         className="mt-2 bg-green-500 hover:bg-green-600 text-white w-full"
-                        disabled={!sharedWithUserId} // Disable the button if no user is selected
+                        disabled={!sharedWithUserId} 
                       >
                         Share Project
                       </Button>

@@ -1,6 +1,7 @@
 import { router } from "../../trpc";
 import { createEditRequest } from "./addEditRequest";
 import { approveEditRequest } from "./approveEditRequest";
+import { deleteEditRequest } from "./deleteEditRequest";
 import { rejectEditRequest } from "./denyEditRequest";
 import { getEditRequestByUserId } from "./getEditRequestByUserId";
 import { getRequestDetailsByNotificationId } from "./getRequestByNotificationId";
@@ -14,5 +15,6 @@ export const RequestRouter = router({
     approveEditRequest:approveEditRequest,
     denyEditRequest:rejectEditRequest,
     getAllEditRequest:getEditRequestByUserId,
-    getMyRequest: getAllEditRequestsFromUsers
+    getMyRequest: getAllEditRequestsFromUsers,
+    deleteRequest:deleteEditRequest
 })
