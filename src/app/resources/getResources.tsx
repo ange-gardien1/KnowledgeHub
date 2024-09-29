@@ -34,7 +34,7 @@ const GetResourcesDoc = () => {
   const [isRequestingEdit, setIsRequestingEdit] = useState(false);
   const [newComment, setNewComment] = useState("");
 
-  // Fetch comments when a resource is selected
+
   const { comments, isLoadingComments, errorComments, refetch } = useComments(
     selectedResource?.documentId || null
   );
@@ -153,7 +153,7 @@ const GetResourcesDoc = () => {
                 </Popover>
               )}
 
-              {/* Comments Section */}
+            
               <div className="mt-4">
                 <h3 className="text-lg font-semibold">Comments</h3>
                 {isLoadingComments ? (
@@ -167,7 +167,7 @@ const GetResourcesDoc = () => {
                         <div key={index} className="border-b py-2">
                           <p>{comment.content}</p>
                           <p className="text-xs text-gray-500">
-                            By {comment.userId}
+                            By {comment.username}
                           </p>
                         </div>
                       ))
@@ -177,7 +177,6 @@ const GetResourcesDoc = () => {
                   </div>
                 )}
 
-                {/* Add Comment Input */}
                 <div className="mt-4">
                   <textarea
                     className="w-full border rounded p-2"

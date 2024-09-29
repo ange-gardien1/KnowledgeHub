@@ -15,10 +15,12 @@ export const getCommentsByDocumentId = publicProcedure
       .select({
         content: comments.content,
         userId: comments.userId,
+        username: users.name, 
       })
       .from(comments)
-      .innerJoin(users, eq(comments.userId, users.id))
+      .innerJoin(users, eq(comments.userId, users.id)) 
       .where(eq(comments.documentId, input.documentId));
 
     return documentComments;
   });
+
