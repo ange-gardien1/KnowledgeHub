@@ -2,7 +2,7 @@ import { z } from "zod";
 import { protectedProcedure } from "../../trpc";
 import { TRPCError } from "@trpc/server";
 import { db } from "@/db";
-import { documents } from "@/db/schema";
+import { documents, comments } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 export const deleteDocument = protectedProcedure
@@ -19,16 +19,20 @@ export const deleteDocument = protectedProcedure
       });
     }
     try {
+      await db.delete(comments).where(eq(comments.documentId, id));
+
       const deletedDocument = await db
         .delete(documents)
         .where(eq(documents.id, id))
         .returning();
+
       if (deletedDocument.length === 0) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Document not found",
         });
       }
+
       return { document: deletedDocument[0] };
     } catch (err: any) {
       throw new TRPCError({

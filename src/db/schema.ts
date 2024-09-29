@@ -179,7 +179,8 @@ export const projectShares = pgTable('project_shares', {
 
 export const comments = pgTable('comments', {
   id: uuid('id').primaryKey(),
-  documentId: uuid('document_id').references(() => documents.id),
+  documentId: uuid('document_id')
+    .references(() => documents.id, { onDelete: 'cascade' }),
   resourceId: uuid('resource_id').references(()=>resources.id),
   userId: uuid('user_id').references(() => users.id),
   content: text('content').notNull(),
