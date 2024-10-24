@@ -65,7 +65,7 @@ const ProjectCreate: React.FC = () => {
                   type="submit"
                   disabled={submitting}
                 >
-                  Submit
+                  create project
                 </button>
               </div>
             </div>

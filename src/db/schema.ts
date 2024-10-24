@@ -129,7 +129,7 @@ export const documents = pgTable('documents', {
   userId: uuid("userId")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  projectId: uuid("project_id").references(() => projects.id), // New column to link documents to a project
+  projectId: uuid("project_id").references(() => projects.id), 
   title: varchar('title', { length: 255 }).notNull(),
   content: text('content'),
   type: varchar('type', { length: 4 }).notNull().default(DocumentType.TEXT),

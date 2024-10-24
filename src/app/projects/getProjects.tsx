@@ -46,7 +46,7 @@ type Document = {
 };
 
 const GetProjects = ({ session }: { session: any }) => {
-  const { toast } = useToast(); 
+  const { toast } = useToast();
 
   const {
     data: projects,
@@ -59,7 +59,7 @@ const GetProjects = ({ session }: { session: any }) => {
   );
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(
     null
-  );  
+  );
 
   const { comments, isLoadingComments, errorComments } = useComments(
     selectedDocument?.id || null
@@ -67,27 +67,26 @@ const GetProjects = ({ session }: { session: any }) => {
   const [isCreatingDocument, setIsCreatingDocument] = useState(false);
   const [menuVisible, setMenuVisible] = useState<string | null>(null);
 
-
   const addResourceMutation =
     trpc.resources.addResourceByDocumentId.useMutation();
 
-    const deleteDocumentMutation = trpc.documents.deleteDocumentById.useMutation({
-      onSuccess: () => {
-        refetch();
-        toast({
-          title: "Document deleted successfully!",
-          description: "The document has been removed.",
-        });
-      },
-      onError: (error) => {
-        toast({
-          title: "Failed to delete document",
-          description: `Error: ${error.message}. Please try again.`,
-          variant: "destructive",
-        });
-      },
-    });
-    
+  const deleteDocumentMutation = trpc.documents.deleteDocumentById.useMutation({
+    onSuccess: () => {
+      refetch();
+      toast({
+        title: "Document deleted successfully!",
+        description: "The document has been removed.",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Failed to delete document",
+        description: `Error: ${error.message}. Please try again.`,
+        variant: "destructive",
+      });
+    },
+  });
+
   const shareProjectMutation = trpc.Projectshare.addShares.useMutation({
     onSuccess: () => {
       toast({
@@ -112,7 +111,7 @@ const GetProjects = ({ session }: { session: any }) => {
       await shareProjectMutation.mutateAsync({
         projectId,
         sharedWithUserId,
-        permission: "view", 
+        permission: "view",
       });
     } catch (error) {
       console.error("Error sharing project:", error);
@@ -156,10 +155,8 @@ const GetProjects = ({ session }: { session: any }) => {
 
     try {
       await deleteDocumentMutation.mutateAsync({ id: selectedDocument.id });
-    
     } catch (error) {
       console.error("Failed to delete document:", error);
-    
     }
   };
 
@@ -290,7 +287,7 @@ const GetProjects = ({ session }: { session: any }) => {
                           handleShareProject(project.id, sharedWithUserId)
                         }
                         className="mt-2 bg-green-500 hover:bg-green-600 text-white w-full"
-                        disabled={!sharedWithUserId} 
+                        disabled={!sharedWithUserId}
                       >
                         Share Project
                       </Button>

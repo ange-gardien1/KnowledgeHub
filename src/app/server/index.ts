@@ -3,6 +3,7 @@ import { comments } from "./routers/comments";
 import { documentsRouter } from "./routers/documents";
 import { RequestRouter } from "./routers/editResquest";
 import { createEditRequest } from "./routers/editResquest/addEditRequest";
+import { GuestUsersRouter } from "./routers/guestUsers";
 import { notificationRouter } from "./routers/notifications";
 
 import { getNotificationByUserId } from "./routers/notifications/getNotification";
@@ -27,7 +28,7 @@ export const appRouter = router({
   request:RequestRouter,
   projects:projectsRouter,
   Roles:roles,
-  Projectshare:shareprojectsRouter
-
+  Projectshare:shareprojectsRouter,
+  GuestUsers:GuestUsersRouter
 });
 export type AppRouter = typeof appRouter;

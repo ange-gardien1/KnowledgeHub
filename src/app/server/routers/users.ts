@@ -5,8 +5,9 @@ import { users } from "@/db/schema";
 export const getUsers = protectedProcedure.query(async () => {
     const Users = await db.select({
       id: users.id,
-      username: users.name,  // Assuming 'name' is the actual field
+      username: users.name,
+      roleId:users.name,  
     }).from(users);
   
-    return Users; // Return the result of the query, not the schema
+    return Users; 
 });

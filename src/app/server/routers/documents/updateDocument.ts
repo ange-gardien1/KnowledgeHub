@@ -49,3 +49,43 @@ export const updateDocument = protectedProcedure
       });
     }
   });
+
+
+  // import { z } from "zod";
+// import { protectedProcedure } from "../../trpc";
+// import { TRPCError } from "@trpc/server";
+// import { db } from "@/db";
+// import { editRequests } from "@/db/schema";
+
+// export const updateDocumentByEditRequest = protectedProcedure
+// .input(
+//     z.object({
+//         id:z.string(),
+//         title: z.string().optional(),
+//         content: z.string().optional(),
+//         type: z.enum(["pdf","text"]).optional(),
+//         pdfUrl:z.string().optional(),
+//     })
+// )
+// .mutation(async ({input: {id, title, content, type, pdfUrl}, ctx: {session}}) => {
+//     if(!session?.user?.id){
+//         throw new TRPCError({
+//             code: "UNAUTHORIZED",
+//             message: "You must be approved to update the document"
+//         });
+//     }
+//     try{
+//         const updateData: any = {
+//             updatedAt: new Date(),
+//         };
+//         if( title! == undefined) updateData.title = title;
+//         if( content! == undefined) updateData.content = content;
+//         if( type !== undefined) updateData.type = type;
+//         if(pdfUrl !== undefined) updateData.pdfUrl = pdfUrl;
+
+//         const updatedEditRequest = await db
+//         .update(editRequests)
+//         .set(updateData)
+//         .where
+//     }
+// })
