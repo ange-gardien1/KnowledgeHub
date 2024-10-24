@@ -1,55 +1,65 @@
 "use client";
 import React from "react";
-
 import { trpc } from "../_trpc/client";
 
 const Settings: React.FC = () => {
+
   const {
     data: guestUsers,
     isLoading: isLoadingUsers,
     error,
+    refetch,
   } = trpc.GuestUsers.getGuestUsers.useQuery();
 
   const { mutate: promoteToAdmin, isPending: isPromoting } =
-    trpc.GuestUsers.promoteToAdmin.useMutation();
-    
+    trpc.GuestUsers.promoteToAdmin.useMutation({
+      onSuccess: () => {
+        refetch();
+      },
+    });
 
   const handlePromote = (userId: string) => {
     promoteToAdmin({ userId });
   };
 
   return (
-    <div className="flex h-screen bg-white">
-      <div className="flex-1 flex flex-col">
-        <div className="p-6">
-          <h2 className="text-xl font-bold">Manage Users</h2>
+    <div className="flex h-screen bg-gray-100">
+      <div className="w-full max-w-4xl mx-auto p-6">
+        <h2 className="text-2xl font-bold text-gray-800 mb-6">Manage Users</h2>
 
-          {isLoadingUsers ? (
-            <p>Loading users...</p>
-          ) : error ? (
-            <p>Error loading users.</p>
-          ) : guestUsers?.length === 0 ? (
-            <p>No guest users found.</p>
-          ) : (
-            <ul className="space-y-4 mt-4">
-              {guestUsers?.map((user) => (
-                <li
-                  key={user.id}
-                  className="flex justify-between items-center border p-4 rounded-md bg-gray-50"
+        {isLoadingUsers ? (
+          <div className="flex justify-center items-center">
+            <p className="ml-4 text-gray-600">Loading users...</p>
+          </div>
+        ) : error ? (
+          <p className="text-red-500">Error loading users: {error.message}</p>
+        ) : guestUsers?.length === 0 ? (
+          <p className="text-gray-600">No guest users found.</p>
+        ) : (
+          <ul className="space-y-4">
+            {guestUsers?.map((user) => (
+              <li
+                key={user.id}
+                className="flex justify-between items-center bg-white shadow-md border p-4 rounded-lg"
+              >
+                <span className="text-lg font-semibold text-gray-700">
+                  {user.username}
+                </span>
+                <button
+                  onClick={() => handlePromote(user.id)}
+                  disabled={isPromoting}
+                  className={`px-4 py-2 rounded-md transition-all ${
+                    isPromoting
+                      ? "bg-blue-300 cursor-not-allowed"
+                      : "bg-blue-600 hover:bg-blue-700"
+                  } text-white`}
                 >
-                  <span className="text-lg font-medium">{user.username}</span>
-                  <button
-                    onClick={() => handlePromote(user.id)}
-                    disabled={isPromoting}
-                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
-                  >
-                    {isPromoting ? "Promoting..." : "Promote to Admin"}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+                  {isPromoting ? "Promoting..." : "Promote to Admin"}
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );
