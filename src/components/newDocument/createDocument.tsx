@@ -77,8 +77,8 @@ const CreateDocuments: React.FC<CreateDocumentsProps> = ({ projectId }) => {
           </button>
         </PopoverTrigger>
 
-        <PopoverContent className="w-[40vw] h-[80vh]  fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className=" bg-white rounded-lg p-6 shadow-lg overflow-y-auto">
+        <PopoverContent className="w-[30vw] h[40vh] fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="w-[60vw] h[50vh] bg-white rounded-lg p-6 shadow-lg overflow-y-auto">
             <div className="flex flex-col h-full">
               {/* Sticky header for the popover content */}
               <div className="sticky top-0 z-20 flex items-center bg-white py-3 border-b border-gray-200">
@@ -139,7 +139,7 @@ const CreateDocuments: React.FC<CreateDocumentsProps> = ({ projectId }) => {
 
                   <EditorContent
                     editor={editor}
-                    className="tiptap mt-1 block w-full h-[400px] rounded-md border border-gray-300 shadow-sm focus:border-primary-500 focus:ring focus:ring-primary-500 focus:ring-opacity-50 bg-white"
+                    className="tiptap mt-1 block w-full h-[500px] rounded-md border border-gray-300 shadow-sm focus:border-primary-500 focus:ring focus:ring-primary-500 focus:ring-opacity-50 bg-white"
                   />
                 </div>
 
