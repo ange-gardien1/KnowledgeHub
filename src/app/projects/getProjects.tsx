@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 
+
 type Project = {
   id: string;
   name: string;
@@ -220,19 +221,21 @@ const GetProjects = ({ session }: { session: any }) => {
   }
 
   return (
-    <div className="flex">
+    <div className="flex ">
       {/* Left Side: Project List */}
       <div className="w-1/3 p-4 border-r border-gray-200 bg-gray-50">
         <h2 className="text-xl font-bold mb-4">Projects</h2>
-        <div className="space-y-4">
+        <div className="space-y-4 flex-1">
           {projects.map((project) => (
             <div
               key={project.id}
               className="cursor-pointer hover:bg-gray-100 rounded-lg transition-colors"
               onClick={() => handleProjectClick(project.id)}
             >
-              <Card className="w-full border border-gray-200 bg-white">
-                <CardContent>
+              <Card className="w-full border border-gray-200 bg-white"> 
+                
+                <CardContent> 
+                
                   <IconFolder
                     stroke={2}
                     size={60}
@@ -245,18 +248,20 @@ const GetProjects = ({ session }: { session: any }) => {
                   <p>
                     Created at:{" "}
                     {new Date(project.createdAt).toLocaleDateString()}
-                  </p>
+                  </p> 
+                   
                 </CardFooter>
               </Card>
+           
               <IconHttpDelete
                 stroke={2}
                 onClick={() => handleDeleteProject()}
-                className="mt-2 bg-red-500 hover:bg-red-600 text-white w-full"
+                className="mt-2 bg-red-400 hover:bg-red-600 text-white w-full"
               />
 
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button className="mt-2 bg-blue-500 hover:bg-blue-600 text-white w-full">
+                  <Button className="mt-2 bg-green-400 hover:bg-green-600 text-white w-full">
                     Share
                   </Button>
                 </PopoverTrigger>
@@ -379,7 +384,7 @@ const GetProjects = ({ session }: { session: any }) => {
                               e.stopPropagation();
                               toggleMenu(document.id);
                             }}
-                            className="absolute top-2 right-2 p-1 rounded-full bg-gray-200 hover:bg-gray-300"
+                            className="absolute top-2 right-2 p-1 rounded-full bg-gray-300 hover:bg-gray-300"
                             style={{
                               minWidth: "auto",
                             }}

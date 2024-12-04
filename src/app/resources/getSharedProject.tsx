@@ -3,6 +3,7 @@ import { trpc } from "../_trpc/client";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { IconFolder, IconPdf, IconTxt } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
+import DOMPurify from "dompurify";
 
 const SharedProjects = () => {
   const {
@@ -18,8 +19,18 @@ const SharedProjects = () => {
     setExpandedProject(expandedProject === projectId ? null : projectId);
   };
 
+  const sanitizeContent = (content: string) => {
+    return DOMPurify.sanitize(
+      content.replace(/<bold>/g, "<strong>").replace(/<\/bold>/g, "</strong>")
+    );
+  };
+
   if (isLoadingProjects) {
-    return <div className="text-center p-4">Loading shared projects...</div>;
+    return (
+      <div className="text-center p-4 animate-pulse">
+        Loading shared projects...
+      </div>
+    );
   }
 
   if (errorProjects) {
@@ -31,7 +42,11 @@ const SharedProjects = () => {
   }
 
   if (!sharedProjects || sharedProjects.length === 0) {
-    return <div className="text-center p-4">No projects shared with you.</div>;
+    return (
+      <div className="text-center p-4 text-gray-500">
+        No projects shared with you.
+      </div>
+    );
   }
 
   return (
@@ -47,20 +62,23 @@ const SharedProjects = () => {
             >
               <Card className="w-full border border-gray-200 bg-white">
                 <CardContent>
-                  <IconFolder
-                    stroke={2}
-                    size={60}
-                    className="text-primary-500"
-                  />
-                  <h3 className="text-lg font-semibold mt-2">{project.name}</h3>
+                  <div className="flex items-center space-x-4">
+                    <IconFolder
+                      stroke={2}
+                      size={40}
+                      className="text-primary-500"
+                    />
+                    <h3 className="text-lg font-semibold">{project.name}</h3>
+                  </div>
                 </CardContent>
                 <CardFooter className="text-gray-600">
-                  <p>{project.description}</p>
-                  <p>
-                    Created at:{" "}
-                    {new Date(project.createdAt).toLocaleDateString()}
+                  <p className="truncate">{project.description}</p>
+                  <p className="text-sm text-gray-500">
+                    Created at: {new Date(project.createdAt).toLocaleDateString()}
                   </p>
-                  <p>Permission: {project.permission}</p>
+                  <p className="text-sm text-gray-500">
+                    Permission: {project.permission}
+                  </p>
                   <Button
                     variant="link"
                     onClick={() => toggleProject(project.projectId)}
@@ -76,22 +94,22 @@ const SharedProjects = () => {
                 {expandedProject === project.projectId && (
                   <div className="mt-4 px-4">
                     {project.documents && project.documents.length > 0 ? (
-                      <ul className="pl-4 list-disc space-y-3">
+                      <ul className="space-y-3">
                         {project.documents.map((doc) => (
-                          <li key={doc.documentId} className="mb-4">
+                          <li key={doc.documentId}>
                             <Card className="border border-gray-200 p-3">
-                              <div className="flex items-center">
+                              <div className="flex items-center space-x-2">
                                 {doc.pdfUrl ? (
                                   <IconPdf
                                     stroke={1.5}
                                     size={30}
-                                    className="text-red-500 mr-2"
+                                    className="text-red-500"
                                   />
                                 ) : (
                                   <IconTxt
                                     stroke={1.5}
                                     size={30}
-                                    className="text-blue-500 mr-2"
+                                    className="text-blue-500"
                                   />
                                 )}
                                 <h4 className="font-semibold text-lg">
@@ -99,9 +117,12 @@ const SharedProjects = () => {
                                 </h4>
                               </div>
                               {doc.content && (
-                                <p className="text-gray-600 mt-1">
-                                  {doc.content}
-                                </p>
+                                <div
+                                  className="text-gray-600 mt-2 text-sm"
+                                  dangerouslySetInnerHTML={{
+                                    __html: sanitizeContent(doc.content),
+                                  }}
+                                />
                               )}
                               {doc.pdfUrl && (
                                 <a
@@ -131,11 +152,8 @@ const SharedProjects = () => {
       </div>
 
       {/* Right Side: Project Details (Optional: Additional Info Here) */}
-      <div className="w-2/3 p-4">
-        {/* You can place additional project details or instructions here if needed */}
-        <div className="text-center">
-          Select a project to view its documents.
-        </div>
+      <div className="w-2/3 p-4 text-center">
+        <p className="text-gray-500">Select a project to view its documents.</p>
       </div>
     </div>
   );

@@ -1,5 +1,8 @@
 import { signIn } from "@/app/auth";
+import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { FcGoogle } from "react-icons/fc";
+
 
 export default function SignInPage() {
   return (
@@ -16,13 +19,13 @@ export default function SignInPage() {
             }}
             className="mb-4"
           >
-            <button
+            <Button
               type="submit"
-              className="w-full py-3 px-4 border border-transparent text-white font-semibold rounded-md shadow-lg bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 flex items-center justify-center transition-colors"
+              className="w-full gap-2 py-3 px-4 border border-transparent text-black font-semibold rounded-md shadow-lg bg-neutral-300 hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 flex items-center justify-center transition-colors"
             >
-              <svg className="w-5 h-5 mr-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="currentColor"><path d="M23.1 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.6c-2.8 2.6-4.1 6.3-4.1 10.3 0 1.2.1 2.4.3 3.6l-5.8-.1c-3.4-3.2-5.4-7.8-5.4-12.8 0-4.5 1.6-8.8 4.4-12.2L6.5 8.5c-3.2 3.1-5.2 7.3-5.2 11.6 0 4.4 1.6 8.8 4.4 12.2L12 27.5c-3.4-3.4-5.3-8-5.3-12.8 0-4.4 1.6-8.8 4.4-12.2L12 8.1v4.2h9.6z"/></svg>
-              Sign in with Google
-            </button>
+             <FcGoogle size={34}/>
+             <span> Sign in with Google </span> 
+            </Button>
           </form>
           {/* <p className="text-center text-gray-600 mt-4">New here? <a href="/signup" className="text-blue-600 hover:underline">Create an account</a></p> */}
         </div>
