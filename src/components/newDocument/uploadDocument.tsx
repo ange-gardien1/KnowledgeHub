@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import { trpc } from "@/app/_trpc/client";
 import { IconPlus, IconTrashX, IconPhotoPlus } from "@tabler/icons-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Button } from "../ui/button";
 
 interface DocumentUploadProps {
   projectId: string; 
@@ -80,10 +81,10 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ projectId }) => {
     <div className="relative flex justify-end p-4">
       <Popover>
         <PopoverTrigger asChild>
-          <button className="button gap-2 bg-primary-500 hover:bg-primary-600 text-highlight-300 flex items-center p-2 rounded">
+          <Button className="bg-green-500 hover:bg-green-600 p-2 rounded">
             <IconPlus size={16} stroke={2} strokeLinejoin="miter" />
             Add Document
-          </button>
+          </Button>
         </PopoverTrigger>
         <PopoverContent className="max-w-lg p-4 bg-white rounded shadow-lg">
           <div className="flex flex-col pb-5">
@@ -92,8 +93,8 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ projectId }) => {
                 Add New Document
               </h2>
               <div className="ml-auto flex gap-4">
-                <button
-                  className="button text-hc-blue-900 dark:bg-hc-darkgray-200 dark:text-gray-300 bg-hc-blue-50 gap-2 p-2 rounded"
+                <Button
+                  className="p-2 rounded bg-red-500 hover:bg-red-600"
                   onClick={() => {
                     setTitle("");
                     setFile(null);
@@ -101,9 +102,9 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ projectId }) => {
                   }}
                 >
                   Cancel
-                </button>
-                <button
-                  className={`button w-fit text-highlight-300 bg-primary-500 gap-2 p-2 rounded ${
+                </Button>
+                <Button
+                  className={`p-2 rounded bg-green-500 hover:bg-green-600${
                     submitting ? "opacity-50" : ""
                   }`}
                   onClick={handleSubmit}
@@ -111,7 +112,7 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({ projectId }) => {
                   disabled={submitting}
                 >
                   Submit
-                </button>
+                </Button>
               </div>
             </div>
             <div className="mt-10">
