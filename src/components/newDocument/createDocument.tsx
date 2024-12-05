@@ -11,6 +11,7 @@ import StarterKit from "@tiptap/starter-kit";
 import Highlight from "@tiptap/extension-highlight";
 import TextAlign from "@tiptap/extension-text-align";
 import MenuBar from "../menuBar";
+import { Button } from "../ui/button";
 
 interface CreateDocumentsProps {
   projectId: string;
@@ -71,10 +72,10 @@ const CreateDocuments: React.FC<CreateDocumentsProps> = ({ projectId }) => {
     <div className="relative flex justify-end p-4">
       <Popover>
         <PopoverTrigger asChild>
-          <button className="button gap-2 bg-primary-500 hover:bg-primary-600 text-gray-800 flex items-center p-2 rounded shadow">
+          <Button className="p-2 bg-blue-500 hover:bg-blue-600 rounded shadow">
             <IconPlus size={16} stroke={2} strokeLinejoin="miter" />
             Create Document
-          </button>
+          </Button>
         </PopoverTrigger>
 
         <PopoverContent className="w-[30vw] h[40vh] fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -86,8 +87,8 @@ const CreateDocuments: React.FC<CreateDocumentsProps> = ({ projectId }) => {
                   Create New Document
                 </h2>
                 <div className="ml-auto flex gap-2">
-                  <button
-                    className="button text-gray-700 bg-gray-200 hover:bg-gray-300 gap-2 p-2 rounded"
+                  <Button
+                    className="bg-red-500 hover:bg-red-600 gap-2 p-2 rounded"
                     onClick={() => {
                       setTitle("");
                       editor?.commands.setContent("");
@@ -95,9 +96,9 @@ const CreateDocuments: React.FC<CreateDocumentsProps> = ({ projectId }) => {
                     }}
                   >
                     Cancel
-                  </button>
-                  <button
-                    className={`button w-fit text-gray-800 bg-primary-500 hover:bg-primary-600 gap-2 p-2 rounded ${
+                  </Button>
+                  <Button
+                    className={`bg-green-500 hover:bg-green-600 gap-2 p-2 rounded ${
                       submitting ? "opacity-50 cursor-not-allowed" : ""
                     }`}
                     onClick={handleSubmit}
@@ -105,7 +106,7 @@ const CreateDocuments: React.FC<CreateDocumentsProps> = ({ projectId }) => {
                     disabled={submitting}
                   >
                     {submitting ? "Saving..." : "Save"}
-                  </button>
+                  </Button>
                 </div>
               </div>
 
