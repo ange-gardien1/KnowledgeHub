@@ -25,6 +25,7 @@ export const LoginCard = () => {
   };
 
   return (
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
     <Card className="w-full h-full md:w-[487px] border-none shadow-none">
       <CardHeader className="flex items-center justify-center text-center p-7">
         <CardTitle className="text-2xl">Welcome Back!</CardTitle>
@@ -85,5 +86,6 @@ export const LoginCard = () => {
         </p>
       </CardContent>
     </Card>
+    </div>
   );
 };
