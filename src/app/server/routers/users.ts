@@ -1,58 +1,58 @@
 import { db } from "@/db";
 import { protectedProcedure, publicProcedure } from "../trpc";
 import { users } from "@/db/schema";
-// import bcrypt from "bcryptjs";
-// import { z } from "zod";
+
+import { z } from "zod";
 
 export const getUsers = protectedProcedure.query(async () => {
-    const Users = await db.select({
+  const Users = await db
+    .select({
       id: users.id,
       username: users.name,
-      roleId:users.name,  
-    }).from(users);
-  
-    return Users; 
+      roleId: users.name,
+    })
+    .from(users);
+
+  return Users;
 });
 
+export const registerUser = publicProcedure
+  .input(
+    z.object({
+      name: z.string().optional(),
+      email: z.string().email(),
+      password: z.string(),
+      roleId: z.string().uuid().optional(),
+    })
+  )
+  .mutation(async ({ input }) => {
+    const { name, email, password, roleId } = input;
 
+    const hashedPassword = "hashedPassword";
 
+    try {
+      const newUser = await db
+        .insert(users)
+        .values({
+          id: crypto.randomUUID(),
+          name: name || null, 
+          email,
+          image: null,
+          emailVerified: null, 
+          roleId: roleId || null, 
+        })
+        .returning({ id: users.id, email: users.email });
 
-// // Define the user registration procedure
-// export const registerUser = protectedProcedure
-//   .input(
-//     z.object({
-//       name: z.string().min(1, "Name is required"),
-//       email: z.string().email("Invalid email address"),
-//       password: z.string().min(6, "Password should be at least 6 characters"),
-//       roleId: z.string().uuid(), // Assuming roleId is passed as a string (UUID)
-//     })
-//   )
-//   .mutation(async ({ input }) => {
-//     const { name, email, password, roleId } = input;
-
-//     // Check if the email already exists
-//     const existingUser = await db.select().from(users).where(users.email, email).first();
-//     if (existingUser) {
-//       throw new Error("User with this email already exists");
-//     }
-
-//     // Hash the password
-//     const hashedPassword = await bcrypt.hash(password, 10);
-
-//     // Insert new user into the database
-//     try {
-//       const newUser = await db.insert(users).values({
-//         name: name, // Explicitly pass as string
-//         email: email, // Explicitly pass as string
-//         password: hashedPassword, // Hash password
-//         roleId: roleId, // Ensure roleId is UUID (string)
-//         emailVerified: null, // Explicitly set to null
-//         image: null, // Explicitly set to null
-//       });
-
-//       return newUser;
-//     } catch (error) {
-//       console.error("Error inserting user:", error);
-//       throw new Error("Failed to register user");
-//     }
-//   });
+      return {
+        success: true,
+        message: "User registered successfully",
+        user: newUser[0], 
+      };
+    } catch (error) {
+      console.error("Error registering user:", error);
+      return {
+        success: false,
+        message: "Failed to register user",
+      };
+    }
+  });
