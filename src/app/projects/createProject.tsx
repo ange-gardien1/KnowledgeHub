@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { IconPlus } from "@tabler/icons-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useToast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
 
 const ProjectCreate: React.FC = () => {
   const [name, setName] = useState("");
@@ -41,10 +42,10 @@ const ProjectCreate: React.FC = () => {
     <div className="relative flex justify-end p-4">
       <Popover>
         <PopoverTrigger asChild>
-          <button className="button gap-2 bg-primary-500 hover:bg-primary-600 text-highlight-300 flex items-center p-2 rounded">
+          <Button className="p-2 rounded">
             <IconPlus size={16} stroke={2} strokeLinejoin="miter" />
             Create New Project
-          </button>
+          </Button>
         </PopoverTrigger>
         <PopoverContent className="max-w-lg p-4 bg-white rounded shadow-lg">
           <div className="flex flex-col pb-5">
@@ -53,20 +54,20 @@ const ProjectCreate: React.FC = () => {
                 Create New Project
               </h2>
               <div className="ml-auto flex gap-4">
-                <button
-                  className="button text-hc-blue-900 dark:bg-hc-darkgray-200 dark:text-gray-300 bg-hc-blue-50 gap-2 p-2 rounded"
+                <Button
+                  className="p-2 rounded bg-red-500 text-white hover:bg-red-600"
                   onClick={() => setName("")}
                 >
                   Cancel
-                </button>
-                <button
-                  className={`button w-fit text-highlight-300 bg-primary-500 gap-2 p-2 rounded ${submitting ? 'opacity-50' : ''}`}
+                </Button>
+                <Button
+                  className={`bg-green-500 text-white hover:bg-green-600 p-2 rounded ${submitting ? 'opacity-50' : ''}`}
                   onClick={handleSubmit}
                   type="submit"
                   disabled={submitting}
                 >
                   create project
-                </button>
+                </Button>
               </div>
             </div>
             <div className="mt-10">

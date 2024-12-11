@@ -319,7 +319,7 @@ const GetProjects = ({ session }: { session: any }) => {
                 <PopoverTrigger asChild>
                   <Button
                     onClick={() => setIsCreatingDocument(true)}
-                    className="bg-primary-500 hover:bg-primary-600 text-black flex items-center p-2 rounded-lg shadow-md"
+                    className="p-2 rounded"
                   >
                     <IconPlus size={16} stroke={2} />
                     <p>Create or Upload Document</p>
