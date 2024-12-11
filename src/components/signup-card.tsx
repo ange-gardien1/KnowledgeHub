@@ -1,7 +1,6 @@
 "use client";
 
 import { FcGoogle } from "react-icons/fc";
-import { FaGithub } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,29 +12,24 @@ import {
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "@/components/ui/form";
-import { registersSchema } from "@/utils/registerSchema";
+import { useState } from "react";
+import { signIn } from "next-auth/react";
 
 export const SignUpCard = () => {
-  const form = useForm<z.infer<typeof registersSchema>>({
-    resolver: zodResolver(registersSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-    },
-  });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const onSubmit = (values: z.infer<typeof registersSchema>) => {};
+  const handleLogin = async () => {
+    setIsLoading(true);
+    console.log("Login with", { email, password });
+    setIsLoading(false);
+  };
+
+  const handleGoogleSignUp = async () => {
+    await signIn("google", { callbackUrl: "/dashboard" });
+  };
+
   return (
     <Card className="w-full h-full md:w-[487px] border-none shadow-none">
       <CardHeader className="flex items-center justify-center text-center p-7">
@@ -43,113 +37,46 @@ export const SignUpCard = () => {
         <CardDescription>
           By Signing up, you agree to our {""}
           <Link href="/privacy">
-            <span className="text-blue-600">Privacy Policy </span>
+            <span className="text-blue-600">Privacy Policy</span>
           </Link>
-          {""}
-          and{""}
+          {""} and{""}
           <Link href="/terms">
-            <span className="text-blue-600"> Terms</span>
+            <span className="text-blue-600">Terms</span>
           </Link>
         </CardDescription>
       </CardHeader>
-      {/* <div className="p-7 mb-2">
-        <Separator />
-      </div> */}
+
       <CardContent className="p-7">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              name="name"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      //   disabled={isPending}
-                      type="text"
-                      placeholder="Enter your Name"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="email"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      //   disabled={isPending}
-                      type="email"
-                      placeholder="Enter your Email "
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              name="password"
-              control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      //   disabled={isPending}
-                      type="password"
-                      placeholder="Enter password"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button
-              // disabled={isPending}
-              size="lg"
-              className="w-full"
-            >
-              Sign Up
-            </Button>
-          </form>
-        </Form>
+        <div className="space-y-4">
+          <Input name="name" type="text" placeholder="Enter your Name" />
+          <Input name="email" type="email" placeholder="Enter your Email" />
+          <Input name="password" type="password" placeholder="Enter password" />
+          <Button size="lg" className="w-full" disabled={isLoading}>
+            {isLoading ? "Signing Up..." : "Sign Up"}
+          </Button>
+        </div>
       </CardContent>
+
       <div className="px-7">
         <Separator />
       </div>
-      <CardContent className="p-7 flex-col gap-y-4">
-        {/* <Button
-          disabled={isPending}
-          variant="secondary"
-          size="lg"
-          className="w-full"
-        >
-          <FcGoogle className="mr-2 size-5" />
-          Login With Google
-        </Button>
+
+      <CardContent className="p-7">
         <Button
-          disabled={isPending}
-          variant="secondary"
           size="lg"
-          className="w-full"
+          className="w-full gap-2 py-3"
+          onClick={handleGoogleSignUp}
         >
-          <FaGithub className="mr-2 size-5" />
-          Login With GitHub
-        </Button> */}
+          <FcGoogle size={34} />
+          <span>Sign in with Google</span>
+        </Button>
       </CardContent>
-      <div className="px-7">
-        <Separator />
-      </div>
+
       <CardContent className="p-7 flex items-center justify-center">
         <p>
-          Alread have an account?
+          Already have an account?{" "}
           <Link href="/signin">
-            <span className="text-blue-500"> Sign In </span>
+            <span className="text-blue-500">Sign In</span>
           </Link>
         </p>
       </CardContent>

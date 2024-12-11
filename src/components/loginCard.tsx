@@ -1,7 +1,6 @@
 "use client";
 
 import { FcGoogle } from "react-icons/fc";
-import { FaGithub } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -73,7 +72,6 @@ export const LoginCard = () => {
           <FcGoogle size={34} />
           <span>Sign in with Google</span>
         </Button>
-        
       </CardContent>
       <div className="px-7">
         <Separator />
