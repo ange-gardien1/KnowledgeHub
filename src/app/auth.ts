@@ -57,11 +57,21 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return session;
     },
 
+
+
+
     async jwt({ token, user }) {
       if (user) {
         token.roleId = user.roleId;
       }
       return token;
+    },
+  },
+
+
+  events: {
+    async createUser({ user }) {
+      console.log("New user created:", user);
     },
   },
 });

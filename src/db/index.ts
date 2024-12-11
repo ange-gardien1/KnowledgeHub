@@ -8,6 +8,6 @@ dotenv.config();
 
 
 let sql;
-sql = neon(process.env.DATABASE_URL!);
+sql = neon(process.env.DATABASE_URL! );
 
 export const db = drizzle(sql, { schema });
