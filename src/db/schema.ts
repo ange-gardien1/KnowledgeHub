@@ -45,7 +45,9 @@ export const users = pgTable("user", {
   email: text("email").notNull(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
+  password: text("password"),
   roleId: uuid('role_id').references(() => roles.id),
+
 });
 
 export const accounts = pgTable(
