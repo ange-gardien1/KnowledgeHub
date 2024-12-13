@@ -8,16 +8,39 @@ import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import { trpc } from "@/app/_trpc/client";
 
 export const LoginCard = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+
+  const loginMutation = trpc.users.loginuser.useMutation({
+    onSuccess: (data) => {
+      console.log("Login successful:", data);
+      alert(data.message);
+      window.location.href = "/dashboard"; // Redirect after login
+    },
+    onError: (error) => {
+      console.error("Login failed:", error.message);
+      alert(error.message);
+    },
+  });
+
   const handleLogin = async () => {
-    setIsLoading(true);
-    console.log("Login with", { email, password });
-    setIsLoading(false);
+    if (!email || !password) {
+      alert("Please fill in all fields.");
+      return;
+    }
+  
+    try {
+      await loginMutation.mutateAsync({ email, password });
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
   };
 
   const handleGoogleSignIn = async () => {
@@ -37,10 +60,11 @@ export const LoginCard = () => {
         <div className="space-y-4">
           <div>
             <Input
-              type="email"
-              placeholder="Enter your Email Address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+             type="email"
+             placeholder="Enter your Email Address"
+             aria-label="Email Address"
+             value={email}
+             onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div>

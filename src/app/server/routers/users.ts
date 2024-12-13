@@ -6,6 +6,9 @@ import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm";
 
+import { compare } from "bcrypt";
+
+
 export const getUsers = protectedProcedure.query(async () => {
   const Users = await db
     .select({
@@ -60,7 +63,9 @@ export const registerUser = publicProcedure
     }
   });
 
-export const loginUser = publicProcedure
+  
+
+  export const loginUser = publicProcedure
   .input(
     z.object({
       email: z.string().email(),
@@ -70,14 +75,24 @@ export const loginUser = publicProcedure
   .mutation(async ({ input }) => {
     const { email, password } = input;
 
-    const user = await db.select().from(users).where(eq(users.email, users));
+    const user = await db.select().from(users).where(eq(users.email, email)).then((res) => res[0]);
 
     if (!user) {
       throw new TRPCError({ code: "NOT_FOUND", message: "User not found" });
     }
 
+    const passwordMatch = await compare(password, user.password || "");
+
+    if (!passwordMatch) {
+      throw new TRPCError({ code: "UNAUTHORIZED", message: "Invalid password" });
+    }
+
     return {
       success: true,
       message: "Login successful",
+      user: {
+        id: user.id,
+        email: user.email,
+      },
     };
   });
