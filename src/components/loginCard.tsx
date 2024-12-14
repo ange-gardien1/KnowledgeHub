@@ -8,21 +8,19 @@ import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
 import { trpc } from "@/app/_trpc/client";
+import { useRouter } from "next/navigation";
 
 export const LoginCard = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
 
   const loginMutation = trpc.users.loginuser.useMutation({
     onSuccess: (data) => {
-      console.log("Login successful:", data);
-      alert(data.message);
-      window.location.href = "/dashboard"; // Redirect after login
+     router.push("/dashboard");
     },
     onError: (error) => {
       console.error("Login failed:", error.message);

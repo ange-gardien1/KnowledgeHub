@@ -32,7 +32,6 @@ export const SignUpCard = () => {
 
     setIsLoading(true);
     try {
-      // Use the `mutateAsync` method to handle async mutations
       const response = await registerUserMutation.mutateAsync({
         name,
         email,

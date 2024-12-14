@@ -11,6 +11,7 @@ import Navbar from "@/components/navBar";
 export default async function Dashboardpage() {
   const session = await auth();
   const user = session?.user?.id;
+  
 
   if (!user) {
     redirect("/signin");
