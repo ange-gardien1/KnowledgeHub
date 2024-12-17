@@ -18,7 +18,6 @@ type Resource = {
   createdAt: string;
   updatedAt: string;
   userName: string | null;
-  // ownerId: string;
 };
 
 const GetResourcesDoc = () => {
