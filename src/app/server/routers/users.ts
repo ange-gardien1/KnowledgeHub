@@ -20,49 +20,6 @@ export const getUsers = protectedProcedure.query(async () => {
   return Users;
 });
 
-// export const registerUser = publicProcedure
-//   .input(
-//     z.object({
-//       name: z.string().optional(),
-//       email: z.string().email(),
-//       password: z.string(),
-//       roleId: z.string().uuid().optional(),
-//     })
-//   )
-//   .mutation(async ({ input }) => {
-//     const { name, email, password, roleId } = input;
-
-//     const hashedPassword = await hash(password, 10);
-
-//     try {
-//       const newUser = await db
-//         .insert(users)
-//         .values({
-//           id: crypto.randomUUID(),
-//           name: name || null,
-//           email,
-//           image: null,
-//           emailVerified: null,
-//           roleId: roleId || null,
-//           password: hashedPassword,
-//         })
-//         .returning({ id: users.id, email: users.email });
-
-//       return {
-//         success: true,
-//         message: "User registered successfully",
-//         user: newUser[0],
-//       };
-//     } catch (error) {
-//       console.error("Error registering user:", error);
-//       throw new TRPCError({
-//         code: "INTERNAL_SERVER_ERROR",
-//         message: "Failed to register user",
-//       });
-//     }
-//   });
-
-
 export const registerUser = publicProcedure
   .input(
     z.object({
@@ -102,7 +59,6 @@ export const registerUser = publicProcedure
       });
     }
   });
- 
 
 export const loginUser = publicProcedure
   .input(

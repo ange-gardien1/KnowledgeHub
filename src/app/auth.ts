@@ -3,8 +3,12 @@ import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { accounts, sessions, users, verificationTokens } from "@/db/schema";
 import { db } from "@/db";
 import google from "next-auth/providers/google";
+import CredentialsProvider from "next-auth/providers/credentials";
+
+import { eq } from "drizzle-orm";
 import type { Provider } from "next-auth/providers";
 import type { DefaultSession, User } from "next-auth";
+import { compare } from "bcrypt";
 
 declare module "next-auth" {
   interface Session {
@@ -23,6 +27,45 @@ const providers: Provider[] = [
     clientId: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   }),
+  CredentialsProvider({
+    name: "Credentials",
+    credentials: {
+      email: { label: "Email", type: "text" },
+      password: { label: "Password", type: "password" },
+    },
+    async authorize(credentials) {
+      const { email, password } = credentials as {
+        email: string;
+        password: string;
+      };
+
+      if (!email || !password) {
+        throw new Error("Email and password are required.");
+      }
+
+      const user = await db
+        .select()
+        .from(users)
+        .where(eq(users.email, email))
+        .then((res) => res[0]);
+
+      if (!user || !user.password) {
+        throw new Error("Invalid email or password.");
+      }
+
+      const passwordMatch = await compare(password, user.password);
+      if (!passwordMatch) {
+        throw new Error("Invalid email or password.");
+      }
+
+      return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        roleId: user.roleId,
+      };
+    },
+  }),
 ];
 
 export const providerMap = providers.map((provider) => {
@@ -35,13 +78,7 @@ export const providerMap = providers.map((provider) => {
 });
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  providers: [
-    google({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    }),
-  ],
-
+  providers,
   adapter: DrizzleAdapter(db, {
     usersTable: users,
     accountsTable: accounts,
@@ -50,24 +87,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   }),
 
   callbacks: {
-    async session({ session, user }) {
-      if (user) {
-        session.user.roleId = user.roleId;
-      }
-      return session;
-    },
-
-
-
-
     async jwt({ token, user }) {
       if (user) {
-        token.roleId = user.roleId;
+        token.id = user.id as string;
+        token.roleId = user.roleId as string | null;
       }
       return token;
     },
-  },
 
+    async session({ session, token }) {
+      if (token) {
+        session.user.id = token.id as string;
+        session.user.roleId = token.roleId as string | null;
+      }
+      return session;
+    },
+  },
 
   events: {
     async createUser({ user }) {

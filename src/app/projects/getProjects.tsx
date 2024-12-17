@@ -90,6 +90,7 @@ const GetProjects = ({ session }: { session: any }) => {
 
   const shareProjectMutation = trpc.Projectshare.addShares.useMutation({
     onSuccess: () => {
+      refetch();
       toast({
         title: "Project shared successfully!",
         description: "The project has been shared with the selected user.",
