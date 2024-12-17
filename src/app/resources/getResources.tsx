@@ -18,6 +18,7 @@ type Resource = {
   createdAt: string;
   updatedAt: string;
   userName: string | null;
+  // ownerId: string;
 };
 
 const GetResourcesDoc = () => {
@@ -28,12 +29,22 @@ const GetResourcesDoc = () => {
   );
   const createEditRequestMutation = trpc.editRequest.useMutation();
 
+  const { mutate: deleteResource, isPending: isDeleting } =
+    trpc.resources.deleteMyresources.useMutation({
+      onSuccess: () => {
+        refetch();
+      },
+      onError: (error) => {
+        console.error("Failed to delete resource:", error);
+        alert("Failed to delete resource. Please try again.");
+      },
+    });
+
   const { mutateAsync: addComment, isPending } =
     trpc.comments.addNewComment.useMutation();
 
   const [isRequestingEdit, setIsRequestingEdit] = useState(false);
   const [newComment, setNewComment] = useState("");
-
 
   const { comments, isLoadingComments, errorComments, refetch } = useComments(
     selectedResource?.documentId || null
@@ -79,6 +90,12 @@ const GetResourcesDoc = () => {
     }
   };
 
+  const handleDeleteResource = (id: string) => {
+    if (confirm("Are you sure you want to delete this resource?")) {
+      deleteResource({ id });
+    }
+  };
+
   if (isLoading) {
     return <p>Loading resources...</p>;
   }
@@ -113,7 +130,15 @@ const GetResourcesDoc = () => {
                     )}
                   </CardContent>
                   <CardFooter>{resource.title}</CardFooter>
-                  <p>{resource.userName}</p>
+                  <Button
+                    variant="destructive"
+                    onClick={() => handleDeleteResource(resource.resourceId)}
+                    disabled={isDeleting}
+                  >
+                    {isDeleting ? "Deleting..." : "Remove"}
+                  </Button>
+
+                  <p className="text-xs text-gray-500">{resource.userName}</p>
                 </Card>
               </div>
             ))}
@@ -153,7 +178,6 @@ const GetResourcesDoc = () => {
                 </Popover>
               )}
 
-            
               <div className="mt-4">
                 <h3 className="text-lg font-semibold">Comments</h3>
                 {isLoadingComments ? (
@@ -188,7 +212,7 @@ const GetResourcesDoc = () => {
                   <Button
                     className="mt-2"
                     onClick={handleAddComment}
-                    disabled={isPending || !newComment.trim()} // Use destructured isLoading state
+                    disabled={isPending || !newComment.trim()}
                   >
                     {isPending ? "Adding Comment..." : "Add Comment"}
                   </Button>

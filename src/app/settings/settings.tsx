@@ -1,9 +1,8 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { trpc } from "../_trpc/client";
 
 const Settings: React.FC = () => {
-
   const {
     data: guestUsers,
     isLoading: isLoadingUsers,
@@ -11,12 +10,22 @@ const Settings: React.FC = () => {
     refetch,
   } = trpc.GuestUsers.getGuestUsers.useQuery();
 
-  const { mutate: promoteToAdmin, isPending: isPromoting } =
-    trpc.GuestUsers.promoteToAdmin.useMutation({
+  const [promotingUserId, setPromotingUserId] = useState<string | null>(null);
+
+  const { mutate: promoteToAdmin } = trpc.GuestUsers.promoteToAdmin.useMutation(
+    {
+      onMutate: (variables) => {
+        setPromotingUserId(variables.userId); 
+      },
       onSuccess: () => {
+        setPromotingUserId(null); 
         refetch();
       },
-    });
+      onError: () => {
+        setPromotingUserId(null); 
+      },
+    }
+  );
 
   const handlePromote = (userId: string) => {
     promoteToAdmin({ userId });
@@ -47,14 +56,16 @@ const Settings: React.FC = () => {
                 </span>
                 <button
                   onClick={() => handlePromote(user.id)}
-                  disabled={isPromoting}
+                  disabled={promotingUserId === user.id}
                   className={`px-4 py-2 rounded-md transition-all ${
-                    isPromoting
+                    promotingUserId === user.id
                       ? "bg-blue-300 cursor-not-allowed"
                       : "bg-blue-600 hover:bg-blue-700"
                   } text-white`}
                 >
-                  {isPromoting ? "Promoting..." : "Promote to Admin"}
+                  {promotingUserId === user.id
+                    ? "Promoting..."
+                    : "Promote to Admin"}
                 </button>
               </li>
             ))}
