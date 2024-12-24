@@ -5,8 +5,9 @@ import { users } from "@/db/schema";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm";
+import { compare, hash } from "bcryptjs";
 
-import { compare, hash } from "bcrypt";
+
 
 export const getUsers = protectedProcedure.query(async () => {
   const Users = await db

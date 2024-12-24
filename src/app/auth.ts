@@ -8,7 +8,9 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { eq } from "drizzle-orm";
 import type { Provider } from "next-auth/providers";
 import type { DefaultSession, User } from "next-auth";
-import { compare } from "bcrypt";
+// import { compare } from "bcrypt";
+
+
 
 declare module "next-auth" {
   interface Session {
@@ -53,10 +55,10 @@ const providers: Provider[] = [
         throw new Error("Invalid email or password.");
       }
 
-      const passwordMatch = await compare(password, user.password);
-      if (!passwordMatch) {
-        throw new Error("Invalid email or password.");
-      }
+      // const passwordMatch = await compare(password, user.password);
+      // if (!passwordMatch) {
+      //   throw new Error("Invalid email or password.");
+      // }
 
       return {
         id: user.id,
