@@ -14,7 +14,7 @@ import { Button } from "./ui/button";
 import NotificationSheet from "./notificationSheet";
 import { trpc } from "@/app/_trpc/client";
 import SignOutButton from "./signOutButton";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function Navbar({ session }: { session: any }) {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
@@ -61,7 +61,8 @@ export default function Navbar({ session }: { session: any }) {
               variant="outline"
             >
               <Avatar className="h-10 w-10">
-                <AvatarImage src={session?.user?.image ?? undefined} />
+                <AvatarImage src={session?.user?.image ?? "https://github.com/shadcn.png"} />
+                <AvatarFallback>{session?.user?.name[0]}</AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
