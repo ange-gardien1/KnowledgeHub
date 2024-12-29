@@ -8,8 +8,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { eq } from "drizzle-orm";
 import type { Provider } from "next-auth/providers";
 import type { DefaultSession, User } from "next-auth";
-// import { compare } from "bcrypt";
-
+import bcrypt from "bcryptjs";
 
 
 declare module "next-auth" {
@@ -55,17 +54,15 @@ const providers: Provider[] = [
         throw new Error("Invalid email or password.");
       }
 
-      // const passwordMatch = await compare(password, user.password);
-      // if (!passwordMatch) {
-      //   throw new Error("Invalid email or password.");
-      // }
-
-      return {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        roleId: user.roleId,
-      };
+      const passwordMatch = await bcrypt.compare(password, user.password);
+      return passwordMatch
+        ? {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          roleId: user.roleId,
+        }
+        : null;
     },
   }),
 ];
@@ -93,6 +90,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (user) {
         token.id = user.id as string;
         token.roleId = user.roleId as string | null;
+        token.email = user.email as string;
+        token.name = user.name as string;
       }
       return token;
     },
@@ -105,10 +104,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return session;
     },
   },
-
   events: {
     async createUser({ user }) {
       console.log("New user created:", user);
     },
+  },
+  session: {
+    strategy: "jwt",
   },
 });

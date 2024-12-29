@@ -159,6 +159,7 @@ export const LoginCard = () => {
         email,
         password,
         redirect: false,
+        callbackUrl: "/dashboard",
       });
 
       if (result?.error) {
