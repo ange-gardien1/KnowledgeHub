@@ -83,7 +83,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     accountsTable: accounts,
     sessionsTable: sessions,
     verificationTokensTable: verificationTokens,
-  }),
+  } as any),
 
   callbacks: {
     async jwt({ token, user }) {
