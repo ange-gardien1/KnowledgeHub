@@ -13,6 +13,7 @@ export default function Provider({ children }: { children: React.ReactNode }) {
         httpBatchLink({
           // url: "http://localhost:3000/api/trpc",
           url: "https://knowledge-hub-delta.vercel.app/api/trpc",
+          
         }),
       ],
     })
