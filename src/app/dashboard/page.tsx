@@ -21,17 +21,17 @@ export default async function Dashboardpage() {
       <Sidebar />
       <div className="flex-1 flex flex-col p-6">
         <Navbar session={session} />
-        <div className="flex-1 mt-6">
+        <div className="flex-1 mt-6 px-6">
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 mb-6">
             <DocumentCount />
             <TextDocumentCount />
             <ProjectsCount />
           </div>
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-            <div className="bg-white shadow-md rounded-lg p-6 col-span-1">
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+            {/* <div className="bg-white shadow-md rounded-lg p-6 col-span-1">
               <h2 className="text-xl font-semibold mb-4">Edit Requests</h2>
               <GetRequest />
-            </div>
+            </div> */}
             <div className="bg-white shadow-md rounded-lg p-6 col-span-2">
               <h2 className="text-xl font-semibold mb-4">Projects</h2>
               <GetProjects session={session} />

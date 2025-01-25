@@ -167,7 +167,7 @@ const GetResourcesDoc = () => {
                 Created At:{" "}
                 {format(new Date(selectedResource.createdAt), "PPpp")}
               </p>
-              {selectedResource.type === "text" && (
+              {/* {selectedResource.type === "text" && (
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button onClick={handleRequestEdit}>
@@ -175,7 +175,7 @@ const GetResourcesDoc = () => {
                     </Button>
                   </PopoverTrigger>
                 </Popover>
-              )}
+              )} */}
 
               <div className="mt-4">
                 <h3 className="text-lg font-semibold">Comments</h3>
