@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { trpc } from "../_trpc/client";
 import {
   Table,
@@ -23,6 +23,7 @@ type Request = {
 };
 
 const GetRequest = () => {
+  const [pendingRequestId, setPendingRequestId] = useState<string | null>(null);
   const { data, isLoading, error, refetch } =
     trpc.request.getMyRequest.useQuery();
 
@@ -54,14 +55,17 @@ const GetRequest = () => {
   });
 
   const handleApprove = (requestId: string) => {
+    setPendingRequestId(requestId);
     approveRequest.mutate({ editRequestId: requestId });
   };
 
   const handleDeny = (requestId: string) => {
+    setPendingRequestId(requestId);
     rejectRequest.mutate({ editRequestId: requestId });
   };
 
   const handleDelete = (requestId: string) => {
+    setPendingRequestId(requestId);
     if (window.confirm("Are you sure you want to delete this request?")) {
       deleteRequest.mutate({ id: requestId });
     }
@@ -74,6 +78,8 @@ const GetRequest = () => {
   if (error) {
     return <div className="p-4 text-red-500">Error: {error.message}</div>;
   }
+  const isActionPending = approveRequest.isPending || rejectRequest.isPending || deleteRequest.isPending;
+
 
   return (
     <div className="max-w-full overflow-x-auto p-4">
@@ -101,38 +107,30 @@ const GetRequest = () => {
                   {new Date(request.requestDate).toLocaleDateString()}
                 </TableCell>
                 <TableCell>
-                  <div className="flex justify-center space-x-2">
-                    <button
-                      onClick={() => handleApprove(request.id)}
-                      className={`text-sm px-2 py-1 rounded ${
-                        request.requestStatus === "APPROVED"
-                          ? "bg-gray-400 cursor-not-allowed"
-                          : "bg-green-500 text-white hover:bg-green-400"
-                      }`}
-                      disabled={
-                        request.requestStatus === "APPROVED" ||
-                        request.requestStatus === "REJECTED"
-                      }
-                    >
-                      Allow
-                    </button>
-                    <button
-                      onClick={() => handleDeny(request.id)}
-                      className={`text-sm px-2 py-1 rounded ${
-                        request.requestStatus === "REJECTED"
-                          ? "bg-gray-400 cursor-not-allowed"
-                          : "bg-red-500 text-white hover:bg-red-400"
-                      }`}
-                      disabled={
-                        request.requestStatus === "REJECTED" ||
-                        request.requestStatus === "APPROVED"
-                      }
-                    >
-                      Deny
-                    </button>
+                  <div className="flex justify-start gap-2">
+                    {request.requestStatus === "pending" && (
+                      <>
+                        <button
+                          onClick={() => handleApprove(request.id)}
+                          className={`text-sm px-2 py-1 rounded bg-green-500 text-white hover:bg-green-400 ${approveRequest.isPending && pendingRequestId == request.id ? "animate-pulse" : ""} ${isActionPending && pendingRequestId === request.id ? "cursor-not-allowed" : ""}`}
+                          disabled={isActionPending && pendingRequestId === request.id}
+                        >
+                          Allow
+                        </button>
+                        <button
+                          onClick={() => handleDeny(request.id)}
+                          className={`text-sm px-2 py-1 rounded bg-yellow-500 text-white hover:bg-yellow-400 ${rejectRequest.isPending && pendingRequestId == request.id ? "animate-pulse" : ""} ${isActionPending && pendingRequestId === request.id ? "cursor-not-allowed" : ""}`}
+                          disabled={isActionPending && pendingRequestId === request.id}
+                        >
+                          Deny
+                        </button>
+
+                      </>
+                    )}
                     <button
                       onClick={() => handleDelete(request.id)}
-                      className="text-sm px-2 py-1 rounded bg-blue-500 text-white hover:bg-blue-400"
+                      className={`text-sm px-2 py-1 rounded bg-red-500 text-white hover:bg-red-400 ${deleteRequest.isPending && pendingRequestId == request.id ? "animate-pulse" : ""} ${isActionPending && pendingRequestId === request.id ? "cursor-not-allowed" : ""}`}
+                      disabled={isActionPending && pendingRequestId === request.id}
                     >
                       Delete
                     </button>

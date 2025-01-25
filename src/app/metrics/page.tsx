@@ -22,11 +22,11 @@ export default async function Metrics() {
               <DocumentCount />
               <ProjectsCount />
             </div>
-            <AreaChartComponent />
+            {/* <AreaChartComponent /> */}
           </div>
-          <div className="flex-grow bg-white shadow-md rounded-lg p-4">
+          {/* <div className="flex-grow bg-white shadow-md rounded-lg p-4">
             <BarChartComponent />
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
