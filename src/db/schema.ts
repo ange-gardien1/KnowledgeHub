@@ -183,7 +183,7 @@ export const comments = pgTable('comments', {
   id: uuid('id').primaryKey(),
   documentId: uuid('document_id')
     .references(() => documents.id, { onDelete: 'cascade' }),
-  resourceId: uuid('resource_id').references(()=>resources.id),
+  resourceId: uuid('resource_id').references(()=>resources.id, {onDelete: 'cascade'}),
   userId: uuid('user_id').references(() => users.id),
   content: text('content').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
